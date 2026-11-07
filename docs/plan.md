@@ -22,7 +22,12 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 - [x] CONTRIBUTING, SECURITY, CI (check, build, test, audit).
 - [x] zh-TW README and guide (`docs/zh-TW/`), `THIRD_PARTY_NOTICES.md`.
 - [ ] `site/` documentation website.
-- [ ] **Open-source checklist:** license headers, no private data in history, docs honest about limits, first tagged release → then switch repo to public.
+- [ ] **Open-source checklist:**
+  - [x] No private data in history or tree (scanned 2026-11-07: one author, no secrets or local paths).
+  - [x] LICENSE (Apache-2.0), NOTICE, THIRD_PARTY_NOTICES, SECURITY, CONTRIBUTING.
+  - [x] Docs list limitations; templates verified in Word.
+  - [ ] gordon-doc-converter PR #61 merged and released, then document the minimum converter version.
+  - [ ] CI green on GitHub; first tagged release; then switch the repo to public.
 
 ## Phase 3 — Native renderer (only if Phase 0/1 shows gaps)
 - [ ] IR → DOCX with `docx` (npm): styles, numbering, tables, header/footer, TOC field.

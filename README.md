@@ -30,7 +30,7 @@ Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
 
 - **Constrained input.** AI authors a strict JSON schema, never HTML or CSS.
 - **Real Word structure.** Headings map to Heading 1–3, lists use numbering definitions, TOC is a field. Users can keep editing in Word.
-- **Template driven.** Themes are tokens plus a `reference.docx`; restyle without touching content.
+- **Template driven.** Six built-in templates are design tokens applied to the DOCX styles; restyle without touching content.
 - **Feedback loop.** Lint and preview results are machine-readable so an AI can fix its own output.
 - **Honest limits.** Do not claim pixel-perfect conversion; document what is unsupported.
 

@@ -26,9 +26,10 @@ page numbers. Inline: bold, italic, code, link, footnote.
 
 ## Templates and tokens
 
-A template = tokens (fonts incl. East Asian, sizes, colors, spacing, table style) +
-`reference.docx` generated from those tokens so Word style names (`Heading 1`,
-`Table Grid`, ...) match the output.
+A template is a set of tokens (fonts including East Asian, sizes, colors, page margin). After
+gordon-doc converts the HTML, `src/exporters/style.ts` writes the tokens into the DOCX
+`styles.xml` (defaults, Normal, Heading 1–4, TOC heading, hyperlink) and `pgMar`. Table borders,
+code backgrounds and list indents still come from the converter.
 
 ## Source map
 
