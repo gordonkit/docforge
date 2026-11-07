@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Features</title>
+<meta name="gordon-header" content="Acme Corp — 內部文件 (Confidential)">
+<meta name="gordon-footer" content="Page {page} of {pages}">
+</head>
+<body>
+<h1>Header, Footer, TOC and Footnotes</h1>
+<div class="toc" data-depth="2" data-title="Contents"></div>
+<h2>First section</h2>
+<p>This paragraph has a footnote.<sup><a href="#fn1" id="fnref1" class="footnote-ref" role="doc-noteref">1</a></sup> It also has a second one.<sup><a href="#fn2" id="fnref2" class="footnote-ref" role="doc-noteref">2</a></sup></p>
+<h3>Detail A</h3>
+<p>Third-level headings are excluded from a depth-2 table of contents.</p>
+<h2 style="break-before: page">Second section</h2>
+<p>This starts on page 2. 中文腳註測試。<sup><a href="#fn3" id="fnref3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
+<h2 style="break-before: page">Third section</h2>
+<p>This starts on page 3.</p>
+<section class="footnotes" role="doc-endnotes"><hr><ol>
+<li id="fn1"><p>First footnote. <a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Second footnote with <em>emphasis</em>. <a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>這是中文註腳內容。 <a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section>
+</body></html>

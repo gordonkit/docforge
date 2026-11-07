@@ -42,16 +42,38 @@ Re-run after the changes: all of the above now render correctly in Word COM.
 - Key/value tables (`th` in body rows) lose their header semantics; the DocForge schema
   should model them explicitly (e.g. a `bold` first column option) rather than via HTML.
 - Page breaks must be expressed as `break-before: page` on a heading or `div`.
-- Header/footer, page numbers, TOC fields, footnotes and custom page size are **not yet
-  tested**; they are not expressible through Pandoc HTML input and need either Pandoc
-  filters/`reference.docx` or the native renderer (Phase 3).
+- Custom page size beyond A4 and per-section headers/footers are not supported.
 - Word and Pandoc must be installed to verify; container images without Pandoc fall back to
   LibreOffice (`ENGINE_FALLBACK`) and were not evaluated.
 
+## Phase 0b: header, footer, page numbers, TOC, footnotes
+
+Sample `04-running-parts.html`, rendered with Word COM (primary) and LibreOffice (cross-check).
+
+| Feature | HTML contract | Word | LibreOffice |
+| --- | --- | --- | --- |
+| Footnotes | `<sup><a class="footnote-ref" href="#fn1">` + `<section class="footnotes">` | OK, real footnotes, CJK OK | OK |
+| Header / footer | `<meta name="gordon-header|gordon-footer" content="…">` | OK, CJK OK | OK |
+| Page numbers | `{page}` / `{pages}` in header or footer text → PAGE / NUMPAGES fields | OK (`Page 1 of 3`) | OK |
+| Table of contents | `<div class="toc" data-depth="2" data-title="Contents"></div>` | OK, field updated by Word on open/export | Placeholder only (no auto update) |
+
+Pandoc reads footnotes natively; the rest needed new support in
+`gordon-doc-converter` (`engines/pandoc.py`: Lua filter for the TOC field, header/footer
+parts added to the package after conversion), documented in its `CHANGELOG.md`.
+No CLI or API change: the contract lives in the HTML source.
+
+Caveats found:
+
+- If Pandoc is not on `PATH`, `gordon-doc` silently falls back to another engine for HTML →
+  DOCX and the result loses all of the above. DocForge must check `gordon-doc doctor` /
+  engine output and fail loudly rather than export a degraded file.
+- A TOC is only populated by Word (or after a manual field update). Previews that use
+  LibreOffice will show the placeholder; use Word COM for authoritative previews.
+
 ## Decision gate
 
-Pandoc + restyled `reference.docx` is **good enough for the MVP body content** (text, lists,
-tables, images, CJK, page breaks) once the fixes above are in. It is **not yet sufficient**
-for headers/footers, page numbers, TOC and footnotes. Proposed path: proceed with Phase 1 on
-the Pandoc route, extend the converter (header/footer/TOC via template or filter) as needed,
-and keep the native `docx` renderer (Phase 3) as the fallback if those cannot be reached.
+**Decision: proceed with Phase 1 on the Pandoc route.** Body content, headers, footers, page
+numbers, TOC and footnotes all render correctly in Word once the converter changes are in.
+The native `docx` renderer (Phase 3) is not needed for the MVP; revisit it only if later
+requirements (per-section headers, custom page sizes, LibreOffice-accurate TOC, tracked
+changes) cannot be met.

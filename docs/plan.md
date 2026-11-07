@@ -6,12 +6,12 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 - [x] Hand-write 3 sample HTML documents (report, meeting minutes, CJK-heavy proposal) — `spikes/phase0/samples/`.
 - [x] Convert with `gordon-doc` and render via Word COM — `spikes/phase0/run.ps1`.
 - [x] Record what breaks — see `docs/fidelity.md`.
-- [x] Decision gate: Pandoc route is OK for body content after converter fixes; header/footer, page numbers, TOC, footnotes still untested (see `docs/fidelity.md`).
+- [x] Decision gate: Pandoc route is OK for body content after converter fixes; header, footer, page numbers, TOC and footnotes also verified in Word (see `docs/fidelity.md`).
 
 ## Phase 1 — MVP
 - [ ] Project scaffold (TypeScript, Vitest, Zod), CLI: `init`, `check`, `preview`, `export`.
 - [ ] Document schema v1 and HTML renderer with tokens; one default template.
-- [ ] DOCX export through `gordon-doc` (Pandoc + generated `reference.docx`).
+- [ ] DOCX export through `gordon-doc` (Pandoc + generated `reference.docx`). HTML contract: `colgroup` widths, `break-before: page`, `gordon-header`/`gordon-footer` meta, `div.toc`, footnote markup.
 - [ ] Preview: DOCX → PDF → PNG pages.
 - [ ] Lint v1 with JSON output.
 
