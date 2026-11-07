@@ -26,6 +26,8 @@ Build first (`npm run build`), then run `node dist/cli/index.js <command>`.
 - **Pandoc** on `PATH`. Without it `gordon-doc` silently falls back to an engine that drops headers, footers, TOC and page breaks, so DocForge refuses to export.
 - For authoritative previews on Windows install Microsoft Word and the converter's `word` and `images` extras (`uv sync --extra word --extra images`), then pass `--engine word-com`. LibreOffice also works but does not fill the table of contents.
 
+**Converter version.** DocForge needs a gordon-doc-converter that includes header/footer meta, `div.toc` and the Word fidelity fixes (merged in gordon-doc-converter PR #61, commit `189c5ea`). Releases up to 0.9.0 do not have them; use `main` until the next release.
+
 ## Exit codes
 
 0 success, 1 operation or validation failure, 2 invalid CLI usage.
