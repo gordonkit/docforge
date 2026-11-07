@@ -1,4 +1,6 @@
-# Architecture (design, not yet implemented)
+# Architecture
+
+Phase 1 implements the Pandoc route below. The native renderer (Phase 3) is not built.
 
 ## Pipeline
 
@@ -28,17 +30,18 @@ A template = tokens (fonts incl. East Asian, sizes, colors, spacing, table style
 `reference.docx` generated from those tokens so Word style names (`Heading 1`,
 `Table Grid`, ...) match the output.
 
-## Planned source map
+## Source map
 
 | Path | Responsibility |
 | --- | --- |
-| `src/schemas/` | Zod schema for documents and templates |
-| `src/renderers/html/` | IR → HTML with shared tokens |
-| `src/renderers/docx/` | HTML→gordon-doc adapter, later native renderer |
-| `src/validators/` | Lint rules with machine-readable output |
-| `src/cli/` | `init`, `check`, `preview`, `export` |
-| `src/templates/` | Built-in templates and reference.docx generator |
-| `skills/docforge/` | AI skill: schema, examples, authoring loop |
+| `src/schemas/document.ts` | Strict Zod schema and `parseDocument` |
+| `src/validators/lint.ts` | Lint rules with machine-readable issues |
+| `src/renderers/html.ts` | Document → HTML (export markup or browser preview) |
+| `src/templates/default.ts` | Design tokens and preview CSS |
+| `src/exporters/gordon-doc.ts` | Locating and running `gordon-doc` and Pandoc |
+| `src/exporters/docx.ts` | Export, DOCX verification, preview (PDF + PNG) |
+| `src/cli/index.ts` | `init`, `check`, `build`, `export`, `preview` |
+| `skills/docforge/` | AI skill (planned, Phase 2) |
 
 ## Known pitfalls to design for
 

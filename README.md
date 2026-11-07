@@ -1,7 +1,7 @@
 # DocForge
 
-> **Status: private, planning phase (Phase 0).** Nothing here is implemented yet.
-> The repository will be made open source once Phase 2 is complete.
+> **Status: private, Phase 1 MVP (v0.1.0).** The CLI, schema, lint and DOCX export work and are
+> verified in Word. The repository will be made open source once Phase 2 is complete.
 
 DocForge is an AI-ready framework for creating consistent, **editable Word (DOCX)**
 documents. It is the document sibling of [SlideForge](https://github.com/gordonkit/slideforge)
@@ -9,13 +9,26 @@ documents. It is the document sibling of [SlideForge](https://github.com/gordonk
 previews, lints and exports it.
 
 ```text
-strict content (JSON / Markdown) ─► validate ─► HTML + tokens ─► preview
-                                                     └──────────► DOCX (real Word styles)
+strict content (JSON) ─► validate + lint ─► HTML ─► gordon-doc (Pandoc) ─► DOCX ─► verify
+                                  └─► HTML preview            └─► PDF + PNG pages (Word)
 ```
+
+## Quick start
+
+```bash
+npm install && npm run build
+node dist/cli/index.js init document.json
+node dist/cli/index.js check document.json
+node dist/cli/index.js export document.json --output document.docx
+node dist/cli/index.js preview document.json --engine word-com
+```
+
+Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
+[gordon-doc](https://github.com/gordonkit/gordon-doc-converter). See [`docs/cli.md`](docs/cli.md).
 
 ## Principles
 
-- **Constrained input.** AI authors a strict schema or a small semantic HTML subset, never free CSS.
+- **Constrained input.** AI authors a strict JSON schema, never HTML or CSS.
 - **Real Word structure.** Headings map to Heading 1–3, lists use numbering definitions, TOC is a field. Users can keep editing in Word.
 - **Template driven.** Themes are tokens plus a `reference.docx`; restyle without touching content.
 - **Feedback loop.** Lint and preview results are machine-readable so an AI can fix its own output.
@@ -26,4 +39,4 @@ strict content (JSON / Markdown) ─► validate ─► HTML + tokens ─► pre
 - [`gordon-doc-converter`](https://github.com/gordonkit/gordon-doc-converter) — conversion orchestration (Pandoc, LibreOffice, Word COM, page images). DocForge uses it for HTML → DOCX (Phase 1), DOCX → PDF and page-image previews.
 - [`slideforge`](https://github.com/gordonkit/slideforge) — presentations. Shares design-token ideas and the AI workflow; code sharing is deferred until both stabilize.
 
-See [`docs/plan.md`](docs/plan.md) for the roadmap and [`docs/architecture.md`](docs/architecture.md) for the design.
+Docs: [CLI](docs/cli.md) · [schema](docs/schema.md) · [validation](docs/validation.md) · [AI workflow](docs/ai-workflow.md) · [limitations](docs/limitations.md) · [fidelity study](docs/fidelity.md) · [architecture](docs/architecture.md) · [roadmap](docs/plan.md).

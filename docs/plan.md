@@ -9,14 +9,15 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 - [x] Decision gate: Pandoc route is OK for body content after converter fixes; header, footer, page numbers, TOC and footnotes also verified in Word (see `docs/fidelity.md`).
 
 ## Phase 1 — MVP
-- [ ] Project scaffold (TypeScript, Vitest, Zod), CLI: `init`, `check`, `preview`, `export`.
-- [ ] Document schema v1 and HTML renderer with tokens; one default template.
-- [ ] DOCX export through `gordon-doc` (Pandoc + generated `reference.docx`). HTML contract: `colgroup` widths, `break-before: page`, `gordon-header`/`gordon-footer` meta, `div.toc`, footnote markup.
-- [ ] Preview: DOCX → PDF → PNG pages.
-- [ ] Lint v1 with JSON output.
+- [x] Project scaffold (TypeScript, Vitest, Zod), CLI: `init`, `check`, `build`, `preview`, `export`.
+- [x] Document schema v1 and HTML renderer with tokens; one default template (tokens drive the HTML preview only).
+- [x] DOCX export through `gordon-doc` (Pandoc + generated `reference.docx`). HTML contract: `colgroup` widths, `break-before: page`, `gordon-header`/`gordon-footer` meta, `div.toc`, footnote markup.
+- [x] Preview: DOCX → PDF → PNG pages (`--engine word-com` for authoritative output).
+- [x] Lint v1 with JSON output, plus DOCX export verification.
+- [ ] Make templates style the DOCX (tokens → reference.docx); today they style the HTML preview only.
 
 ## Phase 2 — AI-ready and shareable
-- [ ] `skills/docforge/` skill with schema reference, examples, authoring loop (`docs/ai-workflow.md`).
+- [ ] `skills/docforge/` skill with schema reference, examples, authoring loop (`docs/ai-workflow.md` is drafted).
 - [ ] 3–5 templates (report, minutes, proposal, letter, CJK).
 - [ ] zh-TW / en docs, CONTRIBUTING, SECURITY, third-party notices, CI.
 - [ ] **Open-source checklist:** license headers, no private data in history, docs honest about limits, first tagged release → then switch repo to public.

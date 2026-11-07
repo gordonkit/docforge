@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "title": "Quarterly Operations Report",
+  "language": "en",
+  "author": "Operations Team",
+  "header": "Acme Corp — Confidential",
+  "footer": "Page {page} of {pages}",
+  "blocks": [
+    { "type": "heading", "level": 1, "text": "Quarterly Operations Report" },
+    {
+      "type": "paragraph",
+      "text": [
+        "Prepared for the ",
+        { "text": "Q3 review", "italic": true },
+        ". See ",
+        { "text": "the dashboard", "href": "https://example.com/dashboard" },
+        " and ",
+        { "text": "ops.yaml", "code": true },
+        " for details.",
+        { "footnote": "Figures are unaudited and rounded to the nearest thousand." }
+      ]
+    },
+    { "type": "toc", "depth": 2, "title": "Contents" },
+    { "type": "heading", "level": 2, "text": "1. Summary" },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        { "text": "Onboarding", "children": ["Self-service setup", { "text": "Guided tours", "children": ["Level three item"] }] },
+        "Pricing change",
+        "Partner channel"
+      ]
+    },
+    { "type": "list", "ordered": true, "items": ["First step", { "text": "Second step", "children": ["Sub step A", "Sub step B"] }, "Third step"] },
+    { "type": "heading", "level": 2, "text": "2. Metrics" },
+    {
+      "type": "table",
+      "caption": "Table 1. Key metrics",
+      "columns": [
+        { "header": "Metric", "width": 40 },
+        { "header": "Q2", "width": 20 },
+        { "header": "Q3", "width": 20 },
+        { "header": "Change", "width": 20 }
+      ],
+      "rows": [
+        ["Revenue (k USD)", "1,240", "1,389", "+12%"],
+        ["Tickets", "412", "379", "-8%"],
+        ["Churn", "2.1%", "1.9%", "-0.2 pt"]
+      ]
+    },
+    { "type": "image", "src": "assets/wide.png", "alt": "Placeholder chart", "caption": "Figure 1. A wide image scaled to the page.", "width": 80 },
+    { "type": "quote", "text": "Quality is not an act, it is a habit." },
+    { "type": "code", "language": "python", "text": "def total(items):\n    return sum(i.price for i in items)" },
+    { "type": "heading", "level": 2, "text": "3. Appendix", "pageBreakBefore": true },
+    { "type": "heading", "level": 3, "text": "3.1 Notes" },
+    { "type": "paragraph", "text": ["Line one", { "break": true }, "line two after a hard break. H", { "text": "2", "sub": true }, "O and x", { "text": "2", "sup": true }, "."] },
+    { "type": "pageBreak" },
+    { "type": "heading", "level": 2, "text": "4. 中文章節" },
+    { "type": "paragraph", "text": "中英文混排 mixed text，全形標點：「引號」、（括號）。" }
+  ]
+}

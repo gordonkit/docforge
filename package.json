@@ -1,0 +1,44 @@
+{
+  "name": "docforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An AI-ready framework for creating consistent, editable Word (DOCX) documents from structured content.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "bin": {
+    "docforge": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "examples",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gordonkit/docforge.git"
+  },
+  "author": "GordonKit",
+  "license": "Apache-2.0",
+  "type": "module",
+  "dependencies": {
+    "fflate": "0.8.3",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}
