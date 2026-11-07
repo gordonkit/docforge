@@ -27,7 +27,7 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
   - [x] LICENSE (Apache-2.0), NOTICE, THIRD_PARTY_NOTICES, SECURITY, CONTRIBUTING.
   - [x] Docs list limitations; templates verified in Word.
   - [x] gordon-doc-converter PR #61 merged (`189c5ea`); minimum version documented in `docs/cli.md`.
-  - [ ] gordon-doc-converter release that contains #61 (owner decision), then replace the `main` requirement with a version number.
+  - [x] gordon-doc-converter 1.0.0rc2 released (PyPI, GitHub, containers); minimum version documented.
   - [ ] CI green on GitHub; first tagged release; then switch the repo to public.
 
 ## Phase 3 — Native renderer (only if Phase 0/1 shows gaps)

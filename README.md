@@ -24,7 +24,7 @@ node dist/cli/index.js preview document.json --engine word-com
 ```
 
 Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
-[gordon-doc](https://github.com/gordonkit/gordon-doc-converter). See [`docs/cli.md`](docs/cli.md).
+[gordon-doc](https://github.com/gordonkit/gordon-doc-converter) 1.0.0rc2 or later. See [`docs/cli.md`](docs/cli.md).
 
 ## Principles
 
