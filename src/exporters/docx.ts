@@ -7,6 +7,7 @@ import { renderHtml } from '../renderers/html.js';
 import type { Block, DocForgeDocument, Inline } from '../schemas/document.js';
 import { getTemplate } from '../templates/default.js';
 import { ToolError, ensurePandoc, runGordonDoc } from './gordon-doc.js';
+import { applyTemplate, templateApplied } from './style.js';
 
 export interface ExportOptions {
   /** Directory of the document JSON (image paths resolve against it). */
@@ -120,7 +121,16 @@ export async function exportDocx(document: DocForgeDocument, options: ExportOpti
   } finally {
     await rm(workspace, { recursive: true, force: true });
   }
-  const { problems, verified } = checkDocx(await readFile(output), expectationsFor(document));
+  let bytes: Uint8Array = await readFile(output);
+  if (template) {
+    bytes = applyTemplate(bytes, template);
+    await writeFile(output, bytes);
+  }
+  const { problems, verified } = checkDocx(bytes, expectationsFor(document));
+  if (template) {
+    if (templateApplied(bytes, template)) verified.push('template');
+    else problems.push(`template ${template.name} was not applied to the DOCX styles`);
+  }
   if (problems.length > 0) {
     await rm(output, { force: true });
     throw new ExportError(`the converter produced a degraded DOCX (removed): ${problems.join('; ')}`);

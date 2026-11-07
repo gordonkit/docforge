@@ -14,11 +14,11 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 - [x] DOCX export through `gordon-doc` (Pandoc + generated `reference.docx`). HTML contract: `colgroup` widths, `break-before: page`, `gordon-header`/`gordon-footer` meta, `div.toc`, footnote markup.
 - [x] Preview: DOCX → PDF → PNG pages (`--engine word-com` for authoritative output).
 - [x] Lint v1 with JSON output, plus DOCX export verification.
-- [ ] Make templates style the DOCX (tokens → reference.docx); today they style the HTML preview only.
+- [x] Templates style the DOCX: tokens are written into `styles.xml` and page margins after conversion (`src/exporters/style.ts`), verified in Word.
 
 ## Phase 2 — AI-ready and shareable
 - [ ] `skills/docforge/` skill with schema reference, examples, authoring loop (`docs/ai-workflow.md` is drafted).
-- [ ] 3–5 templates (report, minutes, proposal, letter, CJK).
+- [ ] 3–5 templates: `default`, `classic`, `compact` done; minutes, proposal, letter remain.
 - [ ] zh-TW / en docs, CONTRIBUTING, SECURITY, third-party notices, CI.
 - [ ] **Open-source checklist:** license headers, no private data in history, docs honest about limits, first tagged release → then switch repo to public.
 

@@ -1,11 +1,15 @@
 /**
- * Design tokens for a document template. In the MVP the tokens drive the HTML preview
- * (`docforge build`). DOCX styling comes from gordon-doc-converter's reference document,
- * so DOCX output does not change with these values yet (see docs/limitations.md).
+ * Design tokens for a document template. The tokens drive both the HTML preview
+ * (`docforge build`) and the DOCX styles (applied after conversion by
+ * `src/exporters/style.ts`).
  */
 export interface Template {
   name: string;
+  description: string;
+  /** CSS font stacks for the HTML preview. */
   fonts: { body: string; heading: string; mono: string };
+  /** Single installed font names written into the DOCX. */
+  docxFonts: { body: string; heading: string; eastAsia: string };
   /** Sizes in points. */
   sizes: { body: number; h1: number; h2: number; h3: number; h4: number; code: number };
   colors: { text: string; heading: string; muted: string; link: string; border: string; tableHeader: string };
@@ -14,27 +18,44 @@ export interface Template {
 }
 
 const cjkStack = '"Noto Sans CJK TC", "Noto Sans TC", "Microsoft JhengHei", "PingFang TC"';
+const cjkSerifStack = '"Noto Serif CJK TC", "Noto Serif TC", "PMingLiU", "Songti TC"';
+const mono = 'Consolas, "Cascadia Mono", monospace';
 
 export const defaultTemplate: Template = {
   name: 'default',
-  fonts: {
-    body: `"Segoe UI", ${cjkStack}, sans-serif`,
-    heading: `"Segoe UI", ${cjkStack}, sans-serif`,
-    mono: 'Consolas, "Cascadia Mono", monospace',
-  },
+  description: 'Clean sans-serif report with blue headings.',
+  fonts: { body: `"Segoe UI", ${cjkStack}, sans-serif`, heading: `"Segoe UI", ${cjkStack}, sans-serif`, mono },
+  docxFonts: { body: 'Segoe UI', heading: 'Segoe UI', eastAsia: 'Microsoft JhengHei' },
   sizes: { body: 10.5, h1: 22, h2: 16, h3: 13, h4: 11, code: 10 },
-  colors: {
-    text: '#111827',
-    heading: '#1f4e79',
-    muted: '#6b7280',
-    link: '#1d4ed8',
-    border: '#bfc5cd',
-    tableHeader: '#f1f3f5',
-  },
+  colors: { text: '#111827', heading: '#1f4e79', muted: '#6b7280', link: '#1d4ed8', border: '#bfc5cd', tableHeader: '#f1f3f5' },
   pageMarginMm: 20,
 };
 
-const templates: Record<string, Template> = { default: defaultTemplate };
+export const classicTemplate: Template = {
+  name: 'classic',
+  description: 'Serif, black headings and generous margins for formal documents.',
+  fonts: { body: `Georgia, "Times New Roman", ${cjkSerifStack}, serif`, heading: `Georgia, "Times New Roman", ${cjkSerifStack}, serif`, mono },
+  docxFonts: { body: 'Georgia', heading: 'Georgia', eastAsia: 'PMingLiU' },
+  sizes: { body: 11.5, h1: 24, h2: 17, h3: 14, h4: 12, code: 10 },
+  colors: { text: '#000000', heading: '#000000', muted: '#555555', link: '#1a0dab', border: '#999999', tableHeader: '#e8e8e8' },
+  pageMarginMm: 25,
+};
+
+export const compactTemplate: Template = {
+  name: 'compact',
+  description: 'Dense sans-serif with teal headings and narrow margins for dense reference material.',
+  fonts: { body: `Calibri, ${cjkStack}, sans-serif`, heading: `Calibri, ${cjkStack}, sans-serif`, mono },
+  docxFonts: { body: 'Calibri', heading: 'Calibri', eastAsia: 'Microsoft JhengHei' },
+  sizes: { body: 9.5, h1: 18, h2: 14, h3: 11.5, h4: 10, code: 9 },
+  colors: { text: '#1f2933', heading: '#0f766e', muted: '#52606d', link: '#0f766e', border: '#cbd2d9', tableHeader: '#e6f4f1' },
+  pageMarginMm: 15,
+};
+
+const templates: Record<string, Template> = {
+  default: defaultTemplate,
+  classic: classicTemplate,
+  compact: compactTemplate,
+};
 
 export function listTemplates(): string[] {
   return Object.keys(templates);

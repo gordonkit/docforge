@@ -3,9 +3,10 @@
 What is implemented is verified in Word (see `fidelity.md`). Everything below is **not**
 supported yet; do not assume it works.
 
-- **Templates do not style the DOCX.** Design tokens drive only the HTML preview
-  (`docforge build`). DOCX styles come from gordon-doc-converter's reference document, so
-  fonts, colors and spacing in the DOCX are fixed. Only the `default` template exists.
+- **Template scope.** Templates set fonts, sizes, heading and text colors, link color and page
+  margins in both the HTML preview and the DOCX. Table borders and shading, code block
+  background and list indentation are fixed by gordon-doc-converter. Three templates exist:
+  `default`, `classic`, `compact` (see `templates.md`).
 - **Table of contents** is a field. Word fills it when the file is opened or exported;
   LibreOffice previews show placeholder text.
 - A4 portrait only. No landscape sections, custom page sizes, columns, or per-section

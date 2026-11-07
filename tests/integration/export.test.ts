@@ -29,7 +29,7 @@ describe('docx export (needs gordon-doc and Pandoc)', () => {
 
     const result = await exportDocx(document, { baseDir, output });
 
-    expect(result.verified).toEqual(['header', 'footer', 'toc', 'footnotes', 'images', 'page-breaks']);
+    expect(result.verified).toEqual(['header', 'footer', 'toc', 'footnotes', 'images', 'page-breaks', 'template']);
     const files = unzipSync(await readFile(output));
     const body = strFromU8(files['word/document.xml']!);
     expect(body).toContain('Quarterly Operations Report');
