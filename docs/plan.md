@@ -17,9 +17,10 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 - [x] Templates style the DOCX: tokens are written into `styles.xml` and page margins after conversion (`src/exporters/style.ts`), verified in Word.
 
 ## Phase 2 — AI-ready and shareable
-- [ ] `skills/docforge/` skill with schema reference, examples, authoring loop (`docs/ai-workflow.md` is drafted).
+- [x] `skills/docforge/SKILL.md`: authoring loop and content rules (links to the schema docs and `examples/report.json`).
 - [ ] 3–5 templates: `default`, `classic`, `compact` done; minutes, proposal, letter remain.
-- [ ] zh-TW / en docs, CONTRIBUTING, SECURITY, third-party notices, CI.
+- [x] CONTRIBUTING, SECURITY, CI (check, build, test, audit).
+- [ ] zh-TW docs, third-party notices, `site/` documentation website.
 - [ ] **Open-source checklist:** license headers, no private data in history, docs honest about limits, first tagged release → then switch repo to public.
 
 ## Phase 3 — Native renderer (only if Phase 0/1 shows gaps)

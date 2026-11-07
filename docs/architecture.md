@@ -41,7 +41,8 @@ A template = tokens (fonts incl. East Asian, sizes, colors, spacing, table style
 | `src/exporters/gordon-doc.ts` | Locating and running `gordon-doc` and Pandoc |
 | `src/exporters/docx.ts` | Export, DOCX verification, preview (PDF + PNG) |
 | `src/cli/index.ts` | `init`, `check`, `build`, `export`, `preview` |
-| `skills/docforge/` | AI skill (planned, Phase 2) |
+| `src/exporters/style.ts` | Applies template tokens to DOCX styles and margins |
+| `skills/docforge/` | AI authoring skill |
 
 ## Known pitfalls to design for
 
