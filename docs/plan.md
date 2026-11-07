@@ -3,10 +3,10 @@
 Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 
 ## Phase 0 — Spike (fidelity study)
-- [ ] Hand-write 3 sample HTML documents (report, meeting minutes, CJK-heavy proposal).
-- [ ] Convert with `gordon-doc` (HTML → DOCX via Pandoc, with and without `reference.docx`).
-- [ ] Record what breaks: tables, nested lists, CJK fonts, page breaks, headers/footers, images.
-- [ ] Decision gate: is Pandoc + reference.docx + filters good enough? Write result in `docs/fidelity.md`.
+- [x] Hand-write 3 sample HTML documents (report, meeting minutes, CJK-heavy proposal) — `spikes/phase0/samples/`.
+- [x] Convert with `gordon-doc` and render via Word COM — `spikes/phase0/run.ps1`.
+- [x] Record what breaks — see `docs/fidelity.md`.
+- [x] Decision gate: Pandoc route is OK for body content after converter fixes; header/footer, page numbers, TOC, footnotes still untested (see `docs/fidelity.md`).
 
 ## Phase 1 — MVP
 - [ ] Project scaffold (TypeScript, Vitest, Zod), CLI: `init`, `check`, `preview`, `export`.
@@ -31,7 +31,10 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 - Shared `forge-core` package with SlideForge (tokens, lint framework, preview pipeline).
 - MCP server wrapper.
 
-## Open questions
-- Input: JSON only, or Markdown with front matter as well?
-- Call `gordon-doc` via CLI subprocess or HTTP API?
-- Language of the first docs (zh-TW first, English second?).
+## Decisions
+- **Input is JSON only** (strict schema). Markdown and HTML are not accepted as authoring input.
+- **Conversion goes through the `gordon-doc` CLI** (subprocess), not the HTTP API.
+- **Docs are written in English first**; zh-TW follows in Phase 2.
+- **Fidelity is verified with Word COM** (most accurate), cross-checked with LibreOffice.
+  Word and Pandoc must be installed locally and `gordon-doc doctor` must report Word COM
+  available (run `uv sync --extra word --extra images` in gordon-doc-converter).

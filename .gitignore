@@ -7,3 +7,6 @@ out/
 # generated documents and screenshots are not committed by default
 /output/
 /previews/
+
+# phase 0 spike outputs
+/spikes/phase0/out/
