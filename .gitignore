@@ -1,0 +1,9 @@
+node_modules/
+dist/
+out/
+*.log
+.DS_Store
+.venv/
+# generated documents and screenshots are not committed by default
+/output/
+/previews/
