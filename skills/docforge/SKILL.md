@@ -32,7 +32,7 @@ CSS or raw XML. Docs: `docs/schema.md`, `docs/validation.md`, `docs/templates.md
 - Put a `toc` block after the title only when there are enough headings to need one.
 - Use `{ "footnote": "..." }` runs for notes. `href` must be http(s), mailto or `#`.
 - `header` and `footer` accept `{page}` and `{pages}`, for example `Page {page} of {pages}`.
-- Pick a `template`: `default`, `classic` (formal serif) or `compact` (dense).
+- Pick a `template`: `default`, `classic` (formal serif), `compact` (dense), `minutes`, `proposal` (large navy headings) or `letter` (serif, wide margins).
 - CJK text works. The DOCX uses an East Asian font from the template; the reader's machine
   needs that font installed.
 

@@ -11,7 +11,7 @@ const documentXml = '<w:document><w:sectPr><w:pgMar w:top="1134" w:right="1134" 
 
 describe('template styling', () => {
   it('has several templates', () => {
-    expect(listTemplates()).toEqual(['default', 'classic', 'compact']);
+    expect(listTemplates()).toEqual(['default', 'classic', 'compact', 'minutes', 'proposal', 'letter']);
   });
 
   it('writes fonts, sizes and colors into styles', () => {

@@ -51,10 +51,43 @@ export const compactTemplate: Template = {
   pageMarginMm: 15,
 };
 
+export const minutesTemplate: Template = {
+  name: 'minutes',
+  description: 'Plain and tight meeting minutes with slate headings.',
+  fonts: { body: `Arial, ${cjkStack}, sans-serif`, heading: `Arial, ${cjkStack}, sans-serif`, mono },
+  docxFonts: { body: 'Arial', heading: 'Arial', eastAsia: 'Microsoft JhengHei' },
+  sizes: { body: 10, h1: 18, h2: 13, h3: 11, h4: 10, code: 9 },
+  colors: { text: '#1f2937', heading: '#334155', muted: '#64748b', link: '#2563eb', border: '#cbd5e1', tableHeader: '#e2e8f0' },
+  pageMarginMm: 18,
+};
+
+export const proposalTemplate: Template = {
+  name: 'proposal',
+  description: 'Confident navy headings and large titles for proposals.',
+  fonts: { body: `Calibri, ${cjkStack}, sans-serif`, heading: `"Segoe UI Semibold", "Segoe UI", ${cjkStack}, sans-serif`, mono },
+  docxFonts: { body: 'Calibri', heading: 'Segoe UI Semibold', eastAsia: 'Microsoft JhengHei' },
+  sizes: { body: 11, h1: 28, h2: 18, h3: 14, h4: 12, code: 10 },
+  colors: { text: '#1a202c', heading: '#1e3a8a', muted: '#64748b', link: '#1d4ed8', border: '#c7d2fe', tableHeader: '#e0e7ff' },
+  pageMarginMm: 22,
+};
+
+export const letterTemplate: Template = {
+  name: 'letter',
+  description: 'Understated serif letter with small black headings and wide margins.',
+  fonts: { body: `"Times New Roman", ${cjkSerifStack}, serif`, heading: `"Times New Roman", ${cjkSerifStack}, serif`, mono },
+  docxFonts: { body: 'Times New Roman', heading: 'Times New Roman', eastAsia: 'PMingLiU' },
+  sizes: { body: 12, h1: 16, h2: 14, h3: 12, h4: 12, code: 10 },
+  colors: { text: '#000000', heading: '#000000', muted: '#444444', link: '#000000', border: '#888888', tableHeader: '#eeeeee' },
+  pageMarginMm: 28,
+};
+
 const templates: Record<string, Template> = {
   default: defaultTemplate,
   classic: classicTemplate,
   compact: compactTemplate,
+  minutes: minutesTemplate,
+  proposal: proposalTemplate,
+  letter: letterTemplate,
 };
 
 export function listTemplates(): string[] {

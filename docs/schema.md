@@ -13,7 +13,7 @@ error names the path (for example `$.blocks[3].rows[1]`). The source of truth is
 | `language` | string | Default `en`. |
 | `author` | string | Stored as a document property; not printed in the body. |
 | `header`, `footer` | string | Running text. `{page}` and `{pages}` become live page-number fields, e.g. `Page {page} of {pages}`. |
-| `template` | string | Default `default`. Built-in: `default`, `classic`, `compact` (see `templates.md`). |
+| `template` | string | Default `default`. Built-in: `default`, `classic`, `compact`, `minutes`, `proposal`, `letter` (see `templates.md`). |
 | `blocks` | Block[] | Required, at least one. |
 
 ## Inline text

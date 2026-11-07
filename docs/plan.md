@@ -18,7 +18,7 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 
 ## Phase 2 — AI-ready and shareable
 - [x] `skills/docforge/SKILL.md`: authoring loop and content rules (links to the schema docs and `examples/report.json`).
-- [ ] 3–5 templates: `default`, `classic`, `compact` done; minutes, proposal, letter remain.
+- [x] Six templates: `default`, `classic`, `compact`, `minutes`, `proposal`, `letter`.
 - [x] CONTRIBUTING, SECURITY, CI (check, build, test, audit).
 - [x] zh-TW README and guide (`docs/zh-TW/`), `THIRD_PARTY_NOTICES.md`.
 - [ ] `site/` documentation website.

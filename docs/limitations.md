@@ -5,8 +5,8 @@ supported yet; do not assume it works.
 
 - **Template scope.** Templates set fonts, sizes, heading and text colors, link color and page
   margins in both the HTML preview and the DOCX. Table borders and shading, code block
-  background and list indentation are fixed by gordon-doc-converter. Three templates exist:
-  `default`, `classic`, `compact` (see `templates.md`).
+  background and list indentation are fixed by gordon-doc-converter. Six templates exist:
+  `default`, `classic`, `compact`, `minutes`, `proposal`, `letter` (see `templates.md`).
 - **Table of contents** is a field. Word fills it when the file is opened or exported;
   LibreOffice previews show placeholder text.
 - A4 portrait only. No landscape sections, custom page sizes, columns, or per-section

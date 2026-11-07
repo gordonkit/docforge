@@ -8,6 +8,9 @@ tokens are applied to the HTML preview (`docforge build`) and to the DOCX styles
 | `default` | Clean sans-serif, blue headings | Segoe UI / Microsoft JhengHei | 10.5 pt | 20 mm |
 | `classic` | Serif, black headings, formal | Georgia / PMingLiU | 11.5 pt | 25 mm |
 | `compact` | Dense, teal headings | Calibri / Microsoft JhengHei | 9.5 pt | 15 mm |
+| `minutes` | Plain, tight, slate headings | Arial / Microsoft JhengHei | 10 pt | 18 mm |
+| `proposal` | Large navy headings | Calibri + Segoe UI Semibold / Microsoft JhengHei | 11 pt | 22 mm |
+| `letter` | Understated serif, small black headings | Times New Roman / PMingLiU | 12 pt | 28 mm |
 
 ## What a template controls in the DOCX
 

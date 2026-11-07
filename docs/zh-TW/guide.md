@@ -40,7 +40,7 @@ docforge preview <document.json> [--output-dir <目錄>] [--engine word-com|libr
 
 ## 範本
 
-`default`（無襯線、藍色標題）、`classic`（襯線、黑色標題、邊距較大）、`compact`（緊湊、青綠色標題）。範本控制字型、字級、標題與文字顏色、連結顏色、頁邊距；表格框線、程式碼底色與清單縮排目前由轉換器固定。
+`default`（無襯線、藍色標題）、`classic`（襯線、黑色標題、邊距較大）、`compact`（緊湊、青綠色標題）、`minutes`（會議記錄）、`proposal`（提案，大型深藍標題）、`letter`（信函，襯線、邊距寬）。範本控制字型、字級、標題與文字顏色、連結顏色、頁邊距；表格框線、程式碼底色與清單縮排目前由轉換器固定。
 
 ## AI 撰寫流程
 
