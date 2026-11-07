@@ -39,4 +39,6 @@ Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
 - [`gordon-doc-converter`](https://github.com/gordonkit/gordon-doc-converter) — conversion orchestration (Pandoc, LibreOffice, Word COM, page images). DocForge uses it for HTML → DOCX (Phase 1), DOCX → PDF and page-image previews.
 - [`slideforge`](https://github.com/gordonkit/slideforge) — presentations. Shares design-token ideas and the AI workflow; code sharing is deferred until both stabilize.
 
-Docs: [CLI](docs/cli.md) · [schema](docs/schema.md) · [validation](docs/validation.md) · [AI workflow](docs/ai-workflow.md) · [limitations](docs/limitations.md) · [fidelity study](docs/fidelity.md) · [architecture](docs/architecture.md) · [roadmap](docs/plan.md).
+[繁體中文](README.zh-TW.md)
+
+Docs: [CLI](docs/cli.md) · [schema](docs/schema.md) · [templates](docs/templates.md) · [validation](docs/validation.md) · [AI workflow](docs/ai-workflow.md) · [limitations](docs/limitations.md) · [fidelity study](docs/fidelity.md) · [architecture](docs/architecture.md) · [roadmap](docs/plan.md).

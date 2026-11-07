@@ -20,7 +20,8 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 - [x] `skills/docforge/SKILL.md`: authoring loop and content rules (links to the schema docs and `examples/report.json`).
 - [ ] 3–5 templates: `default`, `classic`, `compact` done; minutes, proposal, letter remain.
 - [x] CONTRIBUTING, SECURITY, CI (check, build, test, audit).
-- [ ] zh-TW docs, third-party notices, `site/` documentation website.
+- [x] zh-TW README and guide (`docs/zh-TW/`), `THIRD_PARTY_NOTICES.md`.
+- [ ] `site/` documentation website.
 - [ ] **Open-source checklist:** license headers, no private data in history, docs honest about limits, first tagged release → then switch repo to public.
 
 ## Phase 3 — Native renderer (only if Phase 0/1 shows gaps)
