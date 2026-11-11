@@ -1,16 +1,16 @@
 # Architecture
 
-Phase 1 implements the Pandoc route below. The native renderer (Phase 3) is not built.
+DocForge implements the Pandoc route below. The native renderer is not built (see the roadmap).
 
 ## Pipeline
 
 ```text
 Document JSON (+ template it names) ─► strict Zod schema ─► typed document model (IR)
-   ─► HTML renderer (shared CSS/tokens)  ─► browser preview (Phase 1)
+   ─► HTML renderer (shared CSS/tokens)  ─► browser preview
    ─► lint (structure, tables, images, fonts)
    ─► DOCX renderer
-        Phase 1: HTML ─► gordon-doc (Pandoc + reference.docx) ─► DOCX
-        Phase 3: IR ─► `docx` (npm) native renderer ─► DOCX
+        Today:     HTML ─► gordon-doc (Pandoc + reference.docx) ─► DOCX
+        If needed: IR ─► `docx` (npm) native renderer ─► DOCX
    ─► preview: DOCX ─► PDF ─► PNG pages (gordon-doc / LibreOffice)
 ```
 

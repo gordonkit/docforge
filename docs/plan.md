@@ -1,51 +1,49 @@
 # Roadmap
 
-Private until Phase 2 is complete. Each phase ends with tests and honest docs.
+DocForge is pre-release (v0.1.0). This page says what works today, what comes next and the
+decisions behind it. Completed work is listed per release in
+[`CHANGELOG.md`](../CHANGELOG.md); known gaps are in [`limitations.md`](limitations.md).
 
-## Phase 0 — Spike (fidelity study)
-- [x] Hand-write 3 sample HTML documents (report, meeting minutes, CJK-heavy proposal) — `spikes/phase0/samples/`.
-- [x] Convert with `gordon-doc` and render via Word COM — `spikes/phase0/run.ps1`.
-- [x] Record what breaks — see `docs/fidelity.md`.
-- [x] Decision gate: Pandoc route is OK for body content after converter fixes; header, footer, page numbers, TOC and footnotes also verified in Word (see `docs/fidelity.md`).
+## Status
 
-## Phase 1 — MVP
-- [x] Project scaffold (TypeScript, Vitest, Zod), CLI: `init`, `check`, `build`, `preview`, `export`.
-- [x] Document schema v1 and HTML renderer with tokens; one default template (tokens drive the HTML preview only).
-- [x] DOCX export through `gordon-doc` (Pandoc + generated `reference.docx`). HTML contract: `colgroup` widths, `break-before: page`, `gordon-header`/`gordon-footer` meta, `div.toc`, footnote markup.
-- [x] Preview: DOCX → PDF → PNG pages (`--engine word-com` for authoritative output).
-- [x] Lint v1 with JSON output, plus DOCX export verification.
-- [x] Templates style the DOCX: tokens are written into `styles.xml` and page margins after conversion (`src/exporters/style.ts`), verified in Word.
+Working and verified in Word:
 
-## Phase 2 — AI-ready and shareable
-- [x] `skills/docforge/SKILL.md`: authoring loop and content rules (links to the schema docs and `examples/report.json`).
-- [x] Six templates: `default`, `classic`, `compact`, `minutes`, `proposal`, `letter`.
-- [x] CONTRIBUTING, SECURITY, CI (check, build, test, audit).
-- [x] zh-TW README and guide (`docs/zh-TW/`), `THIRD_PARTY_NOTICES.md`.
-- [x] `site/` documentation website (static build from README and docs, CI build and link check; deployed to the Cloudflare Worker `docforge` (Workers Static Assets) from CI on pushes to `main`, see `docs/deploy-site.md`).
-- [x] Cloudflare Worker `docforge`, `docforge.gordonkit.com` custom domain and GitHub secrets (owner).
-- [x] First successful documentation deploy from CI (2026-11-11, `edc5847`).
-- [ ] **Open-source checklist:**
-  - [x] No private data in history or tree (scanned 2026-11-07: one author, no secrets or local paths).
-  - [x] LICENSE (Apache-2.0), NOTICE, THIRD_PARTY_NOTICES, SECURITY, CONTRIBUTING.
-  - [x] Docs list limitations; templates verified in Word.
-  - [x] gordon-doc-converter PR #61 merged (`189c5ea`); minimum version documented in `docs/cli.md`.
-  - [x] gordon-doc-converter 1.0.0rc2 released (PyPI, GitHub, containers); minimum version documented.
-  - [ ] CI green on GitHub; first tagged release; then switch the repo to public.
+- CLI: `init`, `check`, `build`, `preview`, `export`.
+- Document schema v1 (strict JSON), HTML preview, lint with JSON output.
+- DOCX export through `gordon-doc` (Pandoc) with real Word structure: Heading styles,
+  numbered lists, TOC field, header, footer, page numbers, footnotes.
+- Six templates (`default`, `classic`, `compact`, `minutes`, `proposal`, `letter`) applied to
+  the DOCX styles and page margins.
+- Page previews (DOCX → PDF → PNG) for checking output, with Word COM as the reference engine.
+- An AI authoring skill (`skills/docforge/SKILL.md`) and this documentation site.
 
-## Phase 3 — Native renderer (only if Phase 0/1 shows gaps)
-- [ ] IR → DOCX with `docx` (npm): styles, numbering, tables, header/footer, TOC field.
-- [ ] Side-by-side fidelity tests against the Pandoc path.
+## Next
 
-## Later ideas
+- First tagged release.
+- After that, the gaps in [`limitations.md`](limitations.md) are the candidates for new work;
+  open an issue to say which ones matter to you.
+
+## Native renderer (only if needed)
+
+The Pandoc route covers what DocForge supports today (see the [fidelity study](fidelity.md)).
+A native renderer will be built only if measured fidelity gaps justify it:
+
+- IR → DOCX with `docx` (npm): styles, numbering, tables, header/footer, TOC field.
+- Side-by-side fidelity tests against the Pandoc path.
+
+## Ideas
+
+Not planned yet; open an issue to discuss before starting.
+
 - DOCX → IR import for round-trip editing.
 - PDF renderer from the same IR.
-- Shared `forge-core` package with SlideForge (tokens, lint framework, preview pipeline).
+- A shared core package with SlideForge (tokens, lint framework, preview pipeline).
 - MCP server wrapper.
 
 ## Decisions
+
 - **Input is JSON only** (strict schema). Markdown and HTML are not accepted as authoring input.
-- **Conversion goes through the `gordon-doc` CLI** (subprocess), not the HTTP API.
-- **Docs are written in English first**; zh-TW follows in Phase 2.
+- **Conversion goes through the `gordon-doc` CLI** (subprocess), not its HTTP API. Converter
+  fixes belong in [gordon-doc-converter](https://github.com/gordonkit/gordon-doc-converter).
 - **Fidelity is verified with Word COM** (most accurate), cross-checked with LibreOffice.
-  Word and Pandoc must be installed locally and `gordon-doc doctor` must report Word COM
-  available (run `uv sync --extra word --extra images` in gordon-doc-converter).
+- **Docs are written in English first**, with a zh-TW README and guide.

@@ -17,7 +17,9 @@ Integration tests need [Pandoc](https://pandoc.org/installing.html) on `PATH` an
 [gordon-doc](https://github.com/gordonkit/gordon-doc-converter) CLI (set `DOCFORGE_GORDON_DOC`
 or install it next to this repo). Without them they skip themselves, so a green run does not
 prove DOCX export works. Run them locally before changing the exporter or templates, and use
-`docforge preview <file> --engine word-com` on Windows to look at the pages.
+`docforge preview <file> --engine word-com` on Windows to look at the pages. Word COM needs Word
+installed and `gordon-doc doctor` reporting it available (in gordon-doc-converter, run
+`uv sync --extra word --extra images`).
 
 ## Rules
 
@@ -26,4 +28,5 @@ prove DOCX export works. Run them locally before changing the exporter or templa
 - A new lint rule needs a test and a row in `docs/validation.md`; a new template needs a row in
   `docs/templates.md` and a look at its preview pages.
 - Document implemented behavior only, and list gaps in `docs/limitations.md`.
+- Add user-visible changes to the `[Unreleased]` section of `CHANGELOG.md`.
 - Do not commit generated documents or screenshots.
