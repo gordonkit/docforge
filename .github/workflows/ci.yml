@@ -45,7 +45,8 @@ jobs:
 
   deploy-documentation:
     # Does nothing until the repository variable CLOUDFLARE_PAGES_PROJECT is set (see docs/deploy-site.md).
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.CLOUDFLARE_PAGES_PROJECT != ''
+    # Runs on pushes to main. Needs secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (see docs/deploy-site.md).
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [test, documentation]
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -55,18 +56,42 @@ jobs:
     permissions:
       contents: read
       deployments: write
+    env:
+      PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'docforge-docs' }}
+      PAGES_DOMAIN: docforge.gordonkit.com
     steps:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: documentation-site
           path: site/dist
+      - name: Ensure Pages project and custom domain exist
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          api="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects"
+          cf() { curl -sS -o "$RUNNER_TEMP/cf.json" -w '%{http_code}' -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H 'Content-Type: application/json' "$@"; }
+          status=$(cf "$api/$PAGES_PROJECT")
+          if [ "$status" = 404 ]; then
+            echo "Creating Pages project $PAGES_PROJECT"
+            status=$(cf -X POST "$api" --data "{\"name\":\"$PAGES_PROJECT\",\"production_branch\":\"main\"}")
+          fi
+          if [ "$status" != 200 ]; then cat "$RUNNER_TEMP/cf.json"; exit 1; fi
+          status=$(cf "$api/$PAGES_PROJECT/domains/$PAGES_DOMAIN")
+          if [ "$status" = 404 ]; then
+            echo "Adding custom domain $PAGES_DOMAIN"
+            status=$(cf -X POST "$api/$PAGES_PROJECT/domains" --data "{\"name\":\"$PAGES_DOMAIN\"}")
+          fi
+          if [ "$status" != 200 ]; then cat "$RUNNER_TEMP/cf.json"; exit 1; fi
+          jq -r '"Domain \(.result.name): \(.result.status)"' "$RUNNER_TEMP/cf.json"
       - name: Deploy documentation to Cloudflare Pages
         uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: >-
             pages deploy site/dist
-            --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+            --project-name=${{ env.PAGES_PROJECT }}
             --branch=main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

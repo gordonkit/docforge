@@ -4,25 +4,28 @@ The site in `site/` is built from `README.md` and `docs/` by `site/build.mjs`
 (`npm --prefix site run build`, output in `site/dist/`). It is served at
 `https://docforge.gordonkit.com/` from Cloudflare Pages, like the other GordonKit sites.
 
-The `deploy-documentation` job in `.github/workflows/ci.yml` runs on pushes to `main` and does
-nothing until `CLOUDFLARE_PAGES_PROJECT` is set, so nothing is published by accident.
+The `deploy-documentation` job in `.github/workflows/ci.yml` runs on every push to `main` after
+the `test` and `documentation` jobs pass. It:
 
-## One-time setup (Cloudflare and GitHub)
+1. Creates the Pages project (`docforge-docs`, or the repository variable
+   `CLOUDFLARE_PAGES_PROJECT` if set) as a Direct Upload project when it does not exist.
+2. Adds the custom domain `docforge.gordonkit.com` to that project when it is missing. When the
+   `gordonkit.com` zone is on the same Cloudflare account, Cloudflare creates the CNAME to
+   `<project>.pages.dev` and issues the certificate; this can take a few minutes after the first run.
+3. Uploads `site/dist/` with `wrangler pages deploy`.
 
-1. **Pages project.** Cloudflare dashboard → Workers & Pages → Create → Pages → *Direct Upload*
-   (no Git integration; GitHub Actions uploads the build). Name it, for example, `docforge-docs`.
-2. **Custom domain.** In that project → Custom domains → add `docforge.gordonkit.com`. When the
-   `gordonkit.com` zone is on the same Cloudflare account, the CNAME to `<project>.pages.dev` is
-   created automatically.
-3. **API token.** Create a token with *Account → Cloudflare Pages → Edit*.
-4. **GitHub settings** for this repository (or the organization, if the other sites share them):
-   - Secret `CLOUDFLARE_API_TOKEN`
-   - Variables `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_PAGES_PROJECT`
-   - Environment `cloudflare-pages-production` (created automatically on the first deploy; add
-     required reviewers if you want a manual gate).
+## GitHub settings
 
-The site is public even while the repository is private. Set `CLOUDFLARE_PAGES_PROJECT` only when
-you want the documentation to be visible.
+Repository secrets:
+
+- `CLOUDFLARE_API_TOKEN`: a token with *Account → Cloudflare Pages → Edit*.
+- `CLOUDFLARE_ACCOUNT_ID`
+
+The optional repository variable `CLOUDFLARE_PAGES_PROJECT` overrides the project name. The
+environment `cloudflare-pages-production` is created on the first deploy; add required reviewers
+there if you want a manual gate.
+
+The site is public even while the repository is private.
 
 ## Local preview
 
