@@ -26,6 +26,7 @@ const pages = [
   { source: 'docs/fidelity.md', url: '/docs/fidelity/', locale: 'en', label: 'Fidelity study', group: 'Reference' },
   { source: 'docs/deploy-site.md', url: '/docs/deploy-site/', locale: 'en', label: 'Deploying this site', group: 'Reference' },
   { source: 'docs/plan.md', url: '/docs/plan/', locale: 'en', label: 'Roadmap', group: 'Reference' },
+  { source: 'CHANGELOG.md', url: '/changelog/', locale: 'en', label: 'Changelog', group: 'Reference' },
   { source: 'README.zh-TW.md', url: '/zh-TW/', locale: 'zh-TW', label: '總覽', group: '開始' },
   { source: 'docs/zh-TW/guide.md', url: '/zh-TW/guide/', locale: 'zh-TW', label: '使用指南', group: '開始' },
 ];

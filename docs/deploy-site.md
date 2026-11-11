@@ -31,7 +31,7 @@ Repository secrets:
 The environment `cloudflare-workers-production` is created on the first deploy; add required
 reviewers there if you want a manual gate.
 
-The site is public even while the repository is private.
+The site is public regardless of the repository's visibility.
 
 ## Local preview
 

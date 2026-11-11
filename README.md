@@ -1,7 +1,7 @@
 # DocForge
 
-> **Status: private, Phase 1 MVP (v0.1.0).** The CLI, schema, lint and DOCX export work and are
-> verified in Word. The repository will be made open source once Phase 2 is complete.
+> **Status: pre-release (v0.1.0).** The CLI, schema, lint and DOCX export work and are
+> verified in Word. See the [roadmap](docs/plan.md) and [changelog](CHANGELOG.md).
 
 DocForge is an AI-ready framework for creating consistent, **editable Word (DOCX)**
 documents. It is the document sibling of [SlideForge](https://github.com/gordonkit/slideforge)
@@ -29,7 +29,7 @@ Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
 ## Principles
 
 - **Constrained input.** AI authors a strict JSON schema, never HTML or CSS.
-- **Real Word structure.** Headings map to Heading 1–3, lists use numbering definitions, TOC is a field. Users can keep editing in Word.
+- **Real Word structure.** Headings map to Heading 1–4, lists use numbering definitions, TOC is a field. Users can keep editing in Word.
 - **Template driven.** Six built-in templates are design tokens applied to the DOCX styles; restyle without touching content.
 - **Feedback loop.** Lint and preview results are machine-readable so an AI can fix its own output.
 - **Honest limits.** Do not claim pixel-perfect conversion; document what is unsupported.
@@ -41,4 +41,4 @@ Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
 
 [繁體中文](README.zh-TW.md)
 
-Docs: [CLI](docs/cli.md) · [schema](docs/schema.md) · [templates](docs/templates.md) · [validation](docs/validation.md) · [AI workflow](docs/ai-workflow.md) · [limitations](docs/limitations.md) · [fidelity study](docs/fidelity.md) · [architecture](docs/architecture.md) · [roadmap](docs/plan.md).
+Docs: [CLI](docs/cli.md) · [schema](docs/schema.md) · [templates](docs/templates.md) · [validation](docs/validation.md) · [AI workflow](docs/ai-workflow.md) · [limitations](docs/limitations.md) · [fidelity study](docs/fidelity.md) · [architecture](docs/architecture.md) · [roadmap](docs/plan.md) · [changelog](CHANGELOG.md).
