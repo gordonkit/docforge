@@ -21,8 +21,9 @@ Private until Phase 2 is complete. Each phase ends with tests and honest docs.
 - [x] Six templates: `default`, `classic`, `compact`, `minutes`, `proposal`, `letter`.
 - [x] CONTRIBUTING, SECURITY, CI (check, build, test, audit).
 - [x] zh-TW README and guide (`docs/zh-TW/`), `THIRD_PARTY_NOTICES.md`.
-- [x] `site/` documentation website (static build from README and docs, CI build and link check; deployed to Cloudflare Pages from CI on pushes to `main`, see `docs/deploy-site.md`).
-- [ ] Cloudflare Pages project, `docforge.gordonkit.com` custom domain and GitHub variables (owner).
+- [x] `site/` documentation website (static build from README and docs, CI build and link check; deployed to the Cloudflare Worker `docforge` (Workers Static Assets) from CI on pushes to `main`, see `docs/deploy-site.md`).
+- [x] Cloudflare Worker `docforge`, `docforge.gordonkit.com` custom domain and GitHub secrets (owner).
+- [ ] First successful documentation deploy from CI.
 - [ ] **Open-source checklist:**
   - [x] No private data in history or tree (scanned 2026-11-07: one author, no secrets or local paths).
   - [x] LICENSE (Apache-2.0), NOTICE, THIRD_PARTY_NOTICES, SECURITY, CONTRIBUTING.

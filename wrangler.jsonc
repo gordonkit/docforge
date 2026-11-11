@@ -1,0 +1,15 @@
+// Cloudflare Workers Static Assets: the existing "docforge" Worker serves site/dist with no script.
+// Deployed by the deploy-documentation job in .github/workflows/ci.yml (see docs/deploy-site.md).
+// No "routes" key on purpose: the custom domain docforge.gordonkit.com is managed in the
+// Cloudflare dashboard, and leaving routes out keeps wrangler from changing it.
+{
+  "name": "docforge",
+  "compatibility_date": "2026-11-11",
+  "assets": {
+    "directory": "./site/dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "workers_dev": false,
+  "preview_urls": false
+}
