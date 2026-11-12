@@ -34,3 +34,12 @@ docforge preview document.json --engine word-com
 ## 文件
 
 [繁體中文指南](docs/zh-TW/guide.md) · [CLI](docs/cli.md) · [schema](docs/schema.md) · [範本](docs/templates.md) · [驗證](docs/validation.md) · [AI 工作流程](docs/ai-workflow.md) · [限制](docs/limitations.md) · [路線圖](docs/plan.md) · [變更紀錄](CHANGELOG.md)（其餘文件為英文）。
+
+## GordonKit 的其他服務
+
+DocForge 是 [GordonKit](https://gordonkit.com/zh-TW/) 的一部分，GordonKit 提供免費的線上工具與開源專案：
+
+- [gordon-doc-converter](https://docs.gordonkit.com/zh-TW/overview/)：將 DOCX 等文件轉為 PDF、HTML、Markdown 與圖片，提供 Python 套件、CLI 與 HTTP API。
+- [SlideForge](https://slideforge.gordonkit.com/zh-TW/overview/)：以驗證過的 JSON 與版型製作風格一致的簡報，並匯出可編輯文字與圖形的 PowerPoint。
+- [GordonKit Math](https://math.gordonkit.com/zh-tw/)：五到九年級的互動式數學學習，以視覺化、循序漸進的單元帶你理解概念。
+- [Math Background Studio](https://bg.gordonkit.com/zh-tw/)：用數學圖案生成桌布與簡報背景，並匯出為 PNG 或 SVG。

@@ -41,6 +41,20 @@ Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
 - [`gordon-doc-converter`](https://github.com/gordonkit/gordon-doc-converter) — conversion orchestration (Pandoc, LibreOffice, Word COM, page images). DocForge uses it for HTML → DOCX (Phase 1), DOCX → PDF and page-image previews.
 - [`slideforge`](https://github.com/gordonkit/slideforge) — presentations. Shares design-token ideas and the AI workflow; code sharing is deferred until both stabilize.
 
+## More from GordonKit
+
+DocForge is part of [GordonKit](https://gordonkit.com/), a collection of free online tools and
+open-source projects:
+
+- [gordon-doc-converter](https://docs.gordonkit.com/) converts DOCX and other documents to PDF, HTML,
+  Markdown and images, via a Python library, CLI or HTTP API.
+- [SlideForge](https://slideforge.gordonkit.com/) builds consistent presentations from validated JSON and
+  templates, then exports editable PowerPoint text and shapes.
+- [GordonKit Math](https://math.gordonkit.com/) offers interactive mathematics learning for grades 5–9,
+  with visual, step-by-step topics.
+- [Math Background Studio](https://bg.gordonkit.com/) generates wallpapers and slide backgrounds from
+  mathematical patterns and exports them as PNG or SVG.
+
 [繁體中文](README.zh-TW.md)
 
 Docs: [CLI](docs/cli.md) · [schema](docs/schema.md) · [templates](docs/templates.md) · [validation](docs/validation.md) · [AI workflow](docs/ai-workflow.md) · [limitations](docs/limitations.md) · [fidelity study](docs/fidelity.md) · [architecture](docs/architecture.md) · [roadmap](docs/plan.md) · [changelog](CHANGELOG.md).
