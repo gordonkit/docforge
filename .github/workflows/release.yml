@@ -1,17 +1,29 @@
 name: Release
-# A tag vX.Y.Z creates the GitHub release. It publishes @gordonkit/docforge to npm once
-# package.json is no longer private, and the container image once the DOCKERHUB_NAMESPACE
-# repository variable is set. See RELEASING.md.
+# A tag vX.Y.Z creates the GitHub release. It publishes @gordonkit/docforge to npm unless
+# package.json is private, and the container image when the DOCKERHUB_NAMESPACE repository
+# variable is set. Run it by hand with an existing tag to finish a release that stopped
+# half-way: steps whose result already exists are skipped. See RELEASING.md.
 on:
   push:
     tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to finish releasing, for example v0.1.2
+        required: true
+        type: string
 permissions:
   contents: read
+env:
+  TAG: ${{ inputs.tag || github.ref_name }}
 jobs:
   container-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      - name: Check the tag name
+        run: |
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Not a release tag: $TAG" >&2; exit 1; }
       - name: Check the Docker Hub configuration
         # Fails before anything is published, so a half-configured repository cannot leave a
         # release without its image.
@@ -24,6 +36,7 @@ jobs:
           test -n "$DOCKERHUB_TOKEN" || { echo "Set the DOCKERHUB_TOKEN secret" >&2; exit 1; }
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
           persist-credentials: false
       - run: docker compose -f docker/compose.yaml --profile cli build cli
       # The checkout belongs to the runner user, so the container runs as that user to write to /work.
@@ -42,11 +55,10 @@ jobs:
     permissions:
       contents: write # create the GitHub release
       id-token: write # npm trusted publishing and provenance
-    env:
-      TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -78,12 +90,26 @@ jobs:
       - name: Create draft GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$TAG" "gordonkit-docforge-${TAG#v}.tgz" --draft --title "$TAG" --notes-file release-notes.md --verify-tag
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "The GitHub release for $TAG already exists"
+          else
+            gh release create "$TAG" "gordonkit-docforge-${TAG#v}.tgz" --draft --title "$TAG" --notes-file release-notes.md --verify-tag
+          fi
       - id: npm
         name: Decide whether to publish to npm
-        # A package.json marked private is never published.
+        # A package.json marked private is never published, and a version that is already on
+        # npm cannot be published again.
         run: |
-          echo "publish=$(node -p "require('./package.json').private ? 'false' : 'true'")" >> "$GITHUB_OUTPUT"
+          if [ "$(node -p "require('./package.json').private === true")" = "true" ]; then
+            echo "package.json is private; not publishing to npm"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          elif npm view "@gordonkit/docforge@${TAG#v}" version > /dev/null 2>&1; then
+            echo "@gordonkit/docforge@${TAG#v} is already on npm"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish to npm
         if: steps.npm.outputs.publish == 'true'
         # Trusted publishing: npm exchanges the workflow's OIDC token, so no secret is stored.
@@ -105,6 +131,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
           persist-credentials: false
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
       - uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
@@ -123,8 +150,8 @@ jobs:
             ${{ vars.DOCKERHUB_NAMESPACE }}/docforge
             ghcr.io/${{ github.repository }}
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{version}},value=${{ inputs.tag || github.ref_name }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.tag || github.ref_name }}
             type=raw,value=latest
       - name: Build and push the image
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0

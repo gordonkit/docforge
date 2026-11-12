@@ -32,6 +32,17 @@ workflow needs, on npmjs.com:
   `gordonkit/docforge`, workflow `release.yml`, environment `npm`. No npm token is stored in
   GitHub, and npm provenance needs the repository to be public.
 
+npm only lets you add a trusted publisher to a package that exists, so the first version has
+to be published by hand by a member of the organization, from the release tag:
+`npm login`, then `npm publish --provenance=false` (provenance can only be made in CI).
+
+## Finishing a release that stopped half-way
+
+If the release workflow fails after the tag is pushed (as it did for the first npm publish),
+fix the cause and run it again for the same tag: Actions → Release → Run workflow, with the
+tag name. It skips the GitHub release and the npm version if they already exist and then
+pushes the container image. Do not move or delete a pushed tag.
+
 ## Container image setup
 
 The release workflow pushes `docker/Dockerfile` to Docker Hub and GitHub Container Registry
