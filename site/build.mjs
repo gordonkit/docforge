@@ -13,14 +13,15 @@ const siteUrl = 'https://docforge.gordonkit.com';
 const repoBlob = 'https://github.com/gordonkit/docforge/blob/main/';
 const check = process.argv.includes('--check');
 
-/** @type {{ source: string, url: string, locale: 'en'|'zh-TW', label: string, group: string }[]} */
+// `description` replaces the one taken from the page's first paragraph, for a page that opens with a list.
+/** @type {{ source: string, url: string, locale: 'en'|'zh-TW', label: string, group: string, description?: string }[]} */
 const pages = [
   { source: 'README.md', url: '/', locale: 'en', label: 'Overview', group: 'Start' },
   { source: 'docs/cli.md', url: '/docs/cli/', locale: 'en', label: 'CLI', group: 'Use' },
   { source: 'docs/schema.md', url: '/docs/schema/', locale: 'en', label: 'Document schema', group: 'Use' },
   { source: 'docs/templates.md', url: '/docs/templates/', locale: 'en', label: 'Templates', group: 'Use' },
   { source: 'docs/validation.md', url: '/docs/validation/', locale: 'en', label: 'Validation and lint', group: 'Use' },
-  { source: 'docs/ai-workflow.md', url: '/docs/ai-workflow/', locale: 'en', label: 'AI authoring workflow', group: 'Use' },
+  { source: 'docs/ai-workflow.md', url: '/docs/ai-workflow/', locale: 'en', label: 'AI authoring workflow', group: 'Use', description: 'The steps an AI author follows to produce a DocForge document: write strict JSON, check it, preview the pages, then export the DOCX.' },
   { source: 'docs/limitations.md', url: '/docs/limitations/', locale: 'en', label: 'Limitations', group: 'Reference' },
   { source: 'docs/architecture.md', url: '/docs/architecture/', locale: 'en', label: 'Architecture', group: 'Reference' },
   { source: 'docs/fidelity.md', url: '/docs/fidelity/', locale: 'en', label: 'Fidelity study', group: 'Reference' },
@@ -97,11 +98,33 @@ function titleOf(markdown) {
 }
 
 function descriptionOf(markdown) {
-  const lines = markdown.split('\n');
-  const start = lines.findIndex((line) => /^[A-Za-z一-鿿]/.test(line) && !line.startsWith('```'));
-  const text = (start === -1 ? '' : lines.slice(start).join(' ').split(/\n\s*\n/)[0] ?? '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/[`*_>]/g, '').trim();
-  const fallback = 'DocForge turns strict JSON into editable Word (DOCX) documents.';
-  return (text || fallback).slice(0, 200);
+  // The first prose paragraph: lines from the first one that starts with a letter, outside a
+  // code fence, up to the next blank line.
+  const paragraph = [];
+  let fenced = false;
+  for (const line of markdown.split('\n')) {
+    if (line.startsWith('```')) {
+      if (paragraph.length > 0) break;
+      fenced = !fenced;
+    } else if (paragraph.length > 0) {
+      if (line.trim() === '') break;
+      paragraph.push(line.trim());
+    } else if (!fenced && /^[A-Za-z一-鿿]/.test(line)) {
+      paragraph.push(line.trim());
+    }
+  }
+  const text = paragraph.join(' ').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/[`*_]/g, '').trim();
+  return shorten(text || 'DocForge turns strict JSON into editable Word (DOCX) documents.', 200);
+}
+
+/** Cuts at the last sentence end within the limit, or else at a word or clause break with an ellipsis. */
+function shorten(text, limit) {
+  if (text.length <= limit) return text;
+  const head = text.slice(0, limit);
+  const sentence = Math.max(head.lastIndexOf('. '), head.lastIndexOf('。'), head.lastIndexOf(': '), head.lastIndexOf('：'));
+  if (sentence >= limit / 2) return head.slice(0, sentence + 1).replace(/[:：]$/, '.').trim();
+  const clause = Math.max(head.lastIndexOf(' ', limit - 2), head.lastIndexOf('，', limit - 2), head.lastIndexOf('、', limit - 2));
+  return `${head.slice(0, clause > 0 ? clause : limit - 1).replace(/[\s,;:，、；：]+$/, '')}…`;
 }
 
 const logo = 'DocForge <span>Docs</span>';
@@ -199,7 +222,7 @@ function pageHtml(page, markdown) {
     .replace(/^(<h1[^>]*>[\s\S]*?<\/h1>\n(?:<p>[\s\S]*?<\/p>\n)?)/, (head) => `<div class="page-head">${eyebrow}${head}</div>\n`);
   const toc = currentToc.map((item) => `<a href="#${item.id}">${item.text}</a>`).join('');
   const title = page.url === '/' ? 'DocForge: editable Word documents from strict JSON' : page.url === '/zh-TW/' ? 'DocForge：用嚴格 JSON 產生可編輯的 Word 文件' : `${titleOf(markdown)} | DocForge`;
-  const description = descriptionOf(markdown);
+  const description = page.description ?? descriptionOf(markdown);
   const alternates =
     page.url === '/' || page.url === '/zh-TW/'
       ? `<link rel="alternate" hreflang="en" href="${siteUrl}/"><link rel="alternate" hreflang="zh-TW" href="${siteUrl}/zh-TW/"><link rel="alternate" hreflang="x-default" href="${siteUrl}/">`
@@ -285,7 +308,7 @@ for (const page of pages) {
     locale: page.locale,
     url: page.url,
     title: page.label,
-    summary: descriptionOf(markdown),
+    summary: page.description ?? descriptionOf(markdown),
     text: unescapeHtml(`${page.label} ${article.replace(/<button[\s\S]*?<\/button>/g, '').replace(/<[^>]+>/g, ' ')}`).replace(/\s+/g, ' ').toLowerCase(),
   });
 }
