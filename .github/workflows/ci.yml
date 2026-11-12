@@ -86,11 +86,19 @@ jobs:
     environment:
       name: cloudflare-workers-production
       url: https://docforge.gordonkit.com/
+    env:
+      # IndexNow key. Public by design: it is served as /<key>.txt (site/public), and the same key
+      # is used on every GordonKit host.
+      INDEXNOW_KEY: da3af665c0c1192dbb4aad92b7ef3c9f
     steps:
+      # Only the Wrangler configuration and the IndexNow script are needed from the repository;
+      # the site itself is the artifact.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          sparse-checkout: wrangler.jsonc
+          sparse-checkout: |
+            wrangler.jsonc
+            .github/scripts
           sparse-checkout-cone-mode: false
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -99,9 +107,17 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
+      # Before the deploy, so the live site still holds the previous fingerprints to compare with.
+      - name: Plan IndexNow notification
+        run: >-
+          node .github/scripts/indexnow.mjs plan
+          --host docforge.gordonkit.com --dist site/dist
+          --key "$INDEXNOW_KEY" --out "$RUNNER_TEMP/indexnow-plan.json"
       - name: Deploy documentation to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           WRANGLER_SEND_METRICS: "false"
         run: npx --yes wrangler@4.157.0 deploy --config wrangler.jsonc
+      - name: Notify IndexNow
+        run: node .github/scripts/indexnow.mjs submit --plan "$RUNNER_TEMP/indexnow-plan.json"

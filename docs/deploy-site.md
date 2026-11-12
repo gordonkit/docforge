@@ -31,6 +31,25 @@ the `test` and `documentation` jobs pass. It downloads the built site, then runs
   `routes` out means `wrangler deploy` does not add, change or remove it, and the token does not
   need zone permissions.
 
+`site/public/_redirects` sends `/en` and `/en/...` to the same page without the prefix (301).
+The English pages have no language prefix here; gordonkit.com uses `/en/`, so a guessed
+`/en/` address would otherwise be a 404.
+
+## IndexNow
+
+The deploy job tells [IndexNow](https://www.indexnow.org/) (Bing and others) which pages
+changed, with `.github/scripts/indexnow.mjs`, the same script every GordonKit site uses:
+
+- Before the deploy, `plan` fingerprints every page in `sitemap.xml` (title, description and
+  visible text), compares them with `/indexnow-state.json` on the live site, and writes the new
+  fingerprints into `site/dist` so they ship with the deploy.
+- After the deploy, `submit` sends the new, changed and removed addresses. A failed
+  notification is a warning in the job log; it does not fail the deploy.
+
+The key is public by design: IndexNow reads it from `/<key>.txt`
+(`site/public/da3af665c0c1192dbb4aad92b7ef3c9f.txt`). The first deploy finds no saved state and
+sends every page.
+
 ## GitHub settings
 
 Repository secrets:

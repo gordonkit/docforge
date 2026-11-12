@@ -10,6 +10,10 @@ All notable changes are listed here. The format follows
 
 - Every page of the documentation site carries JSON-LD that names GordonKit as its publisher,
   with the same identifiers gordonkit.com uses.
+- Page descriptions on the documentation site come from the first paragraph only and are no
+  longer cut in the middle of a word.
+- On the documentation site, `/en` and `/en/...` redirect to the same page without the prefix.
+- Deploying the documentation site notifies IndexNow of the pages that changed.
 
 ## [0.1.3] - 2026-11-12
 
