@@ -1,0 +1,22 @@
+name: Install Pandoc, LibreOffice and gordon-doc
+description: The tools the integration tests and the package check need to export and preview a DOCX.
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        DEBIAN_FRONTEND: noninteractive
+        # The Pandoc 3.1.3 that Ubuntu 24.04 packages drops footnotes from HTML input, so
+        # install the tested release from pandoc's own GitHub release, checked by digest.
+        PANDOC_VERSION: "3.13"
+        PANDOC_SHA256: 7e3736f255090296ca5d1a14291a76b9b3c43cd385011b1621a4d0c16091a70f
+      run: |
+        curl --fail --silent --show-error --location --retry 3 --output pandoc.deb \
+          "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb"
+        echo "${PANDOC_SHA256}  pandoc.deb" | sha256sum --check
+        sudo apt-get -o Acquire::Retries=3 update
+        sudo apt-get -o Acquire::Retries=3 install --yes --no-install-recommends ./pandoc.deb libreoffice-writer
+        rm pandoc.deb
+        pipx install "gordon-doc-converter[images]==1.0.0"
+        pandoc --version | head -n 1
+        gordon-doc version

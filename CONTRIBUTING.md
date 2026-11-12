@@ -11,6 +11,7 @@ npm ci
 npm run check
 npm run build
 npm test
+npm run test:package
 ```
 
 Integration tests need [Pandoc](https://pandoc.org/installing.html) on `PATH` and the

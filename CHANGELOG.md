@@ -6,6 +6,18 @@ All notable changes are listed here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The package is renamed `@gordonkit/docforge` in preparation for npm; the command is still
+  `docforge`. It is not published yet.
+- `npm run build` clears `dist` first, so files from removed modules cannot end up in the package.
+
+### Added
+
+- `npm run test:package` installs the packed tarball in a clean project and uses it; CI runs it.
+- A release workflow: a version tag creates the GitHub release from the changelog and, once the
+  package is no longer private, publishes it to npm with provenance.
+
 ## [0.1.0] - 2026-11-12
 
 First tagged release.

@@ -1,0 +1,67 @@
+name: Release
+# A tag vX.Y.Z creates the GitHub release and, once package.json is no longer private,
+# publishes @gordonkit/docforge to npm. See RELEASING.md.
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@gordonkit/docforge
+    permissions:
+      contents: write # create the GitHub release
+      id-token: write # npm trusted publishing and provenance
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run check:release -- --tag "$TAG"
+      - uses: ./.github/actions/install-tools
+        timeout-minutes: 15
+      - run: npm run check
+      - run: npm run build
+      - run: npm test
+        env:
+          DOCFORGE_REQUIRE_TOOLS: "1"
+      - name: Install the packed tarball in a clean project
+        run: npm run test:package
+        env:
+          DOCFORGE_REQUIRE_TOOLS: "1"
+      - run: npm pack --ignore-scripts
+      - name: Write the release notes from CHANGELOG.md
+        run: |
+          awk -v version="${TAG#v}" '
+            index($0, "## [" version "]") == 1 { found = 1; next }
+            found && /^(## \[|\[[^]]+\]: )/ { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md
+      - name: Create draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$TAG" "gordonkit-docforge-${TAG#v}.tgz" --draft --title "$TAG" --notes-file release-notes.md --verify-tag
+      - id: npm
+        name: Decide whether to publish to npm
+        # package.json stays private until the owner decides to publish (RELEASING.md).
+        run: echo "publish=$(node -p "require('./package.json').private ? 'false' : 'true'")" >> "$GITHUB_OUTPUT"
+      - name: Publish to npm
+        if: steps.npm.outputs.publish == 'true'
+        # Trusted publishing: npm exchanges the workflow's OIDC token, so no secret is stored.
+        run: npm publish --ignore-scripts
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit "$TAG" --draft=false

@@ -1,5 +1,5 @@
 {
-  "name": "docforge",
+  "name": "@gordonkit/docforge",
   "version": "0.1.0",
   "private": true,
   "description": "An AI-ready framework for creating consistent, editable Word (DOCX) documents from structured content.",
@@ -22,14 +22,33 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "node --input-type=module -e \"import { rmSync } from 'node:fs'; rmSync('dist', { recursive: true, force: true })\" && tsc",
     "check": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:package": "node scripts/check-package.mjs",
+    "check:release": "node scripts/check-release.mjs",
+    "prepack": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gordonkit/docforge.git"
   },
+  "homepage": "https://docforge.gordonkit.com/",
+  "bugs": {
+    "url": "https://github.com/gordonkit/docforge/issues"
+  },
+  "keywords": [
+    "docx",
+    "word",
+    "document",
+    "report",
+    "pandoc",
+    "ai"
+  ],
   "author": "GordonKit",
   "license": "Apache-2.0",
   "type": "module",

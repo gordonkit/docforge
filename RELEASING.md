@@ -8,10 +8,28 @@ Steps for maintainers. Contributors do not need this file.
 2. Move the `[Unreleased]` entries in `CHANGELOG.md` under the new version and date, and add
    the compare link.
 3. Set `version` in `package.json` (and `package-lock.json` with `npm install --package-lock-only`).
-4. Commit, then tag and push: `git tag -a vX.Y.Z -m "vX.Y.Z"` and `git push origin vX.Y.Z`.
-5. Create the GitHub release from the tag with the changelog section as notes.
+4. Run `npm run check:release -- --tag vX.Y.Z` and `npm run test:package`.
+5. Commit, then tag and push: `git tag -a vX.Y.Z -m "vX.Y.Z"` and `git push origin vX.Y.Z`.
+
+The tag starts `.github/workflows/release.yml`. It repeats the checks, creates the GitHub
+release with the changelog section as notes and the package tarball attached, and publishes
+`@gordonkit/docforge` to npm if `package.json` is not private. A published npm version cannot
+be reused or replaced; fix a bad release with a new patch version.
 
 The documentation site deploys on every push to `main` (see `docs/deploy-site.md`), not on tags.
+
+## Publishing to npm (one time)
+
+The package is named `@gordonkit/docforge` because the unscoped name `docforge` belongs to
+another project. The command it installs is still `docforge`. Nothing is published while
+`"private": true` is in `package.json`. To start publishing:
+
+1. Create the `gordonkit` organization on npmjs.com, if it does not exist.
+2. On npmjs.com, add a trusted publisher for `@gordonkit/docforge`: GitHub Actions, repository
+   `gordonkit/docforge`, workflow `release.yml`, environment `npm`. npm provenance needs the
+   repository to be public.
+3. Remove `"private": true` from `package.json`, add the `npm install` instructions to the
+   README files and `docs/cli.md`, and release a new version.
 
 ## Before the repository goes public (one time)
 
@@ -22,5 +40,4 @@ The documentation site deploys on every push to `main` (see `docs/deploy-site.md
 - [x] Documentation site deployed from CI.
 - [ ] Re-scan the history for private data right before the switch.
 - [x] First tagged release (`v0.1.0`).
-- [ ] Switch the repository to public; then remove `"private": true` from `package.json` only if
-      the package is going to be published to npm.
+- [ ] Switch the repository to public. Publishing to npm is a separate decision (see above).
