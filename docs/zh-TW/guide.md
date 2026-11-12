@@ -26,9 +26,9 @@ docforge preview <document.json> [--output-dir <目錄>] [--engine word-com|libr
 
 ## 環境需求
 
-- `gordon-doc`：依序從環境變數 `DOCFORGE_GORDON_DOC`、`PATH`、同層的 `../gordon-doc-converter/.venv` 尋找。
+- `gordon-doc` 1.0.0 以上：`pip install "gordon-doc-converter[images]"`。若設定了環境變數 `DOCFORGE_GORDON_DOC` 就執行它指向的檔案，否則執行 `PATH` 上的 `gordon-doc`，不會到其他位置尋找。版本低於 1.0.0 時 DocForge 會拒絕執行並提示升級。
 - **Pandoc** 必須在 `PATH` 上。沒有時 `gordon-doc` 會悄悄改用較弱的引擎而遺失頁首、目錄等，所以 DocForge 會直接拒絕匯出。
-- Windows 預覽：安裝 Word 與轉換器的 `word`、`images` 附加套件（`uv sync --extra word --extra images`）。
+- Windows 預覽：安裝 Word 並加裝 `word` 附加套件（`pip install "gordon-doc-converter[word,images]"`）。
 
 ## 文件格式（schema v1）
 
@@ -56,7 +56,7 @@ docforge preview <document.json> [--output-dir <目錄>] [--engine word-com|libr
 ## 已知限制
 
 - 僅支援 A4 直式；整份文件只有一組頁首與頁尾。
-- 圖片必須是本機檔案。
+- 圖片必須是本機檔案，且位於 JSON 檔所在的資料夾（或其子資料夾）內；不接受 `..`、絕對路徑與網址。
 - 表格儲存格只能放行內文字，不支援合併儲存格或巢狀清單。
 - 註腳是純文字；不支援註解、追蹤修訂與交互參照。
 - 目錄由 Word 開啟或匯出時才會填入；LibreOffice 預覽只顯示佔位文字。

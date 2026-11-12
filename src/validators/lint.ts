@@ -1,5 +1,5 @@
 import { existsSync, statSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { locateImage } from '../images.js';
 import type { Block, DocForgeDocument } from '../schemas/document.js';
 import { getTemplate, listTemplates } from '../templates/default.js';
 
@@ -106,8 +106,8 @@ export function lintDocument(document: DocForgeDocument, options: LintOptions): 
         break;
       }
       case 'image': {
-        const file = resolve(options.baseDir, block.src);
-        if (/^[a-z][a-z0-9+.-]*:/i.test(block.src)) {
+        const location = locateImage(block.src, options.baseDir);
+        if (!location.ok && location.reason === 'remote') {
           add({
             code: 'image-remote',
             severity: 'error',
@@ -115,7 +115,15 @@ export function lintDocument(document: DocForgeDocument, options: LintOptions): 
             message: `image "${block.src}" is not a local file`,
             fix: 'download the image next to the document and use a relative path',
           });
-        } else if (!existsSync(file) || !statSync(file).isFile()) {
+        } else if (!location.ok) {
+          add({
+            code: 'image-outside-document',
+            severity: 'error',
+            path,
+            message: `image "${block.src}" is outside the folder of the document JSON`,
+            fix: 'copy the image into the document folder (or a subfolder) and use a relative path without ".."',
+          });
+        } else if (!existsSync(location.file) || !statSync(location.file).isFile()) {
           add({
             code: 'image-missing',
             severity: 'error',

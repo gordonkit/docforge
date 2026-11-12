@@ -14,9 +14,12 @@ npm test
 ```
 
 Integration tests need [Pandoc](https://pandoc.org/installing.html) on `PATH` and the
-[gordon-doc](https://github.com/gordonkit/gordon-doc-converter) CLI (set `DOCFORGE_GORDON_DOC`
-or install it next to this repo). Without them they skip themselves, so a green run does not
-prove DOCX export works. Run them locally before changing the exporter or templates, and use
+[gordon-doc](https://github.com/gordonkit/gordon-doc-converter) 1.0.0 or later: put it on
+`PATH`, set `DOCFORGE_GORDON_DOC`, or keep a `gordon-doc-converter` checkout with a `.venv` next
+to this repo (the tests find that one; the CLI does not). The preview test also needs
+LibreOffice. Without the tools these tests skip themselves locally, so a green local run does
+not prove DOCX export works. CI installs the tools and sets `DOCFORGE_REQUIRE_TOOLS=1`, which
+turns a missing tool into a failure. Run them before changing the exporter or templates, and use
 `docforge preview <file> --engine word-com` on Windows to look at the pages. Word COM needs Word
 installed and `gordon-doc doctor` reporting it available (in gordon-doc-converter, run
 `uv sync --extra word --extra images`).

@@ -19,10 +19,10 @@ adapters, so PDF or Markdown renderers can be added later.
 
 ## Content model
 
-Block types: `heading(1-3)`, `paragraph`, `list(ordered|bullet, nested)`, `table`,
-`image(+caption, alt)`, `quote`, `code`, `pageBreak`, `toc`, `callout`.
-Document metadata: title, author, language, page size, margins, header/footer text,
-page numbers. Inline: bold, italic, code, link, footnote.
+Block types: `heading(1-4)`, `paragraph`, `list(ordered|bullet, nested)`, `table`,
+`image(+caption, alt)`, `quote`, `code`, `pageBreak`, `toc`.
+Document metadata: title, author, language, template, header/footer text with page numbers.
+Inline: bold, italic, code, superscript, subscript, link, footnote, line break.
 
 ## Templates and tokens
 
@@ -39,9 +39,10 @@ code backgrounds and list indents still come from the converter.
 | `src/validators/lint.ts` | Lint rules with machine-readable issues |
 | `src/renderers/html.ts` | Document → HTML (export markup or browser preview) |
 | `src/templates/default.ts` | Design tokens and preview CSS |
-| `src/exporters/gordon-doc.ts` | Locating and running `gordon-doc` and Pandoc |
+| `src/images.ts` | Keeps image paths inside the document folder |
+| `src/exporters/gordon-doc.ts` | Locating and running `gordon-doc` and Pandoc, minimum converter version |
 | `src/exporters/docx.ts` | Export, DOCX verification, preview (PDF + PNG) |
-| `src/cli/index.ts` | `init`, `check`, `build`, `export`, `preview` |
+| `src/cli/run.ts` | `init`, `check`, `build`, `export`, `preview` (`src/cli/index.ts` is the executable entry) |
 | `src/exporters/style.ts` | Applies template tokens to DOCX styles and margins |
 | `skills/docforge/` | AI authoring skill |
 

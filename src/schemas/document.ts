@@ -97,7 +97,7 @@ const tableSchema = z
 const imageSchema = z
   .object({
     type: z.literal('image'),
-    /** Path relative to the document file. */
+    /** Path relative to the document file; it must stay inside the document's folder. */
     src: nonEmpty,
     /** Required: describes the image for accessibility and for reviewers of the output. */
     alt: nonEmpty,
@@ -143,7 +143,7 @@ export const documentSchema = z
     header: nonEmpty.optional(),
     /** Page footer text. `{page}` and `{pages}` become live page-number fields. */
     footer: nonEmpty.optional(),
-    /** Name of a built-in template or a path to a template JSON file. */
+    /** Name of a built-in template. */
     template: nonEmpty.default('default'),
     blocks: z.array(blockSchema).min(1),
   })

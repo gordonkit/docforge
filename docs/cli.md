@@ -22,11 +22,11 @@ Build first (`npm run build`), then run `node dist/cli/index.js <command>`.
 
 ## Requirements
 
-- `gordon-doc` ([gordon-doc-converter](https://github.com/gordonkit/gordon-doc-converter)). It is found through `DOCFORGE_GORDON_DOC`, then `PATH`, then a sibling `../gordon-doc-converter/.venv` checkout.
+- `gordon-doc` ([gordon-doc-converter](https://github.com/gordonkit/gordon-doc-converter)) 1.0.0 or later: `pip install "gordon-doc-converter[images]"` (the `images` extra renders the PNG pages for `preview`). DocForge runs the file named by `DOCFORGE_GORDON_DOC` if that is set, otherwise `gordon-doc` from `PATH`. It looks nowhere else.
 - **Pandoc** on `PATH`. Without it `gordon-doc` silently falls back to an engine that drops headers, footers, TOC and page breaks, so DocForge refuses to export.
-- For authoritative previews on Windows install Microsoft Word and the converter's `word` and `images` extras (`uv sync --extra word --extra images`), then pass `--engine word-com`. LibreOffice also works but does not fill the table of contents.
+- For authoritative previews on Windows install Microsoft Word and add the `word` extra (`pip install "gordon-doc-converter[word,images]"`), then pass `--engine word-com`. LibreOffice also works but does not fill the table of contents.
 
-**Converter version.** DocForge needs a gordon-doc-converter that includes header/footer meta, `div.toc` and the Word fidelity fixes (merged in gordon-doc-converter PR #61, commit `189c5ea`). They ship in `gordon-doc-converter` 1.0.0rc2 or later. Because it is a release candidate, install it with `pip install --pre gordon-doc-converter` (or `uv tool install --prerelease allow gordon-doc-converter`). Earlier releases silently drop headers, footers and the table of contents.
+**Converter version.** DocForge needs gordon-doc-converter 1.0.0 or later, which adds header/footer meta, `div.toc` and the Word fidelity fixes. Earlier releases drop headers, footers and the table of contents, so DocForge refuses to run a `gordon-doc` older than 1.0.0 and tells you to upgrade.
 
 ## Exit codes
 

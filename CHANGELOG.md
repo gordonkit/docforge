@@ -18,16 +18,20 @@ First public release candidate, `0.1.0`.
   `default`, `classic`, `compact`, `minutes`, `proposal`, `letter`.
 - Page previews: DOCX → PDF → PNG, with `--engine word-com` for reference output.
 - Lint with JSON output, and DOCX export verification.
+- Images must be inside the folder of the document JSON. Lint reports `image-outside-document`
+  for absolute paths and paths that leave it, and `export` refuses them.
+- `gordon-doc` is run only from `DOCFORGE_GORDON_DOC` or `PATH`, and a converter older than
+  1.0.0 is refused with an upgrade hint.
 - AI authoring skill in `skills/docforge/SKILL.md`.
 - Documentation in English, a zh-TW README and guide, and a documentation site at
   <https://docforge.gordonkit.com/>. The site shares the SlideForge documentation look: top bar
   with search, language menu and light/dark toggle, grouped side menu, "On this page" list and
   previous/next links.
-- CONTRIBUTING, SECURITY, THIRD_PARTY_NOTICES and CI (type check, build, test, audit, site
-  link check).
+- CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, THIRD_PARTY_NOTICES, Dependabot and CI (type check,
+  build, tests including DOCX export and LibreOffice preview, audit, site link check).
 
 ### Requirements
 
-- Node.js 24+, Pandoc, and gordon-doc-converter 1.0.0rc2 or later.
+- Node.js 24+, Pandoc, and gordon-doc-converter 1.0.0 or later.
 
 [Unreleased]: https://github.com/gordonkit/docforge/commits/main

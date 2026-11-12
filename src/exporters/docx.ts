@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os';
 import { basename, dirname, extname, join, resolve } from 'node:path';
 import { unzipSync, strFromU8 } from 'fflate';
+import { locateImage } from '../images.js';
 import { renderHtml } from '../renderers/html.js';
 import type { Block, DocForgeDocument, Inline } from '../schemas/document.js';
 import { getTemplate } from '../templates/default.js';
@@ -106,6 +107,12 @@ export async function exportDocx(document: DocForgeDocument, options: ExportOpti
   const output = resolve(options.output);
   if (extname(output).toLowerCase() !== '.docx') throw new ExportError('output must end with .docx');
   if (existsSync(output) && !options.overwrite) throw new ExportError(`${output} already exists; pass --overwrite to replace it`);
+  // Lint reports this too, but library callers may export without linting.
+  for (const block of document.blocks) {
+    if (block.type === 'image' && !locateImage(block.src, options.baseDir).ok) {
+      throw new ExportError(`image "${block.src}" must be a local file inside the folder of the document JSON`);
+    }
+  }
   await ensurePandoc();
   const template = getTemplate(document.template);
   const workspace = await mkdtemp(join(tmpdir(), 'docforge-'));

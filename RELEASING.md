@@ -18,7 +18,7 @@ The documentation site deploys on every push to `main` (see `docs/deploy-site.md
 - [x] No private data in the tree or history (scanned 2026-11-07).
 - [x] LICENSE (Apache-2.0), NOTICE, THIRD_PARTY_NOTICES, SECURITY, CONTRIBUTING.
 - [x] Limitations documented; templates verified in Word.
-- [x] Minimum gordon-doc-converter version (1.0.0rc2) released and documented in `docs/cli.md`.
+- [x] Minimum gordon-doc-converter version (1.0.0) released and documented in `docs/cli.md`.
 - [x] Documentation site deployed from CI.
 - [ ] Re-scan the history for private data right before the switch.
 - [ ] First tagged release (`v0.1.0`).

@@ -1,7 +1,5 @@
 import { execFile } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 /** A failure to run an external conversion tool, with an actionable message. */
 export class ToolError extends Error {}
@@ -24,31 +22,51 @@ function run(command: string, args: string[], timeoutMs: number): Promise<ToolRe
   });
 }
 
+/** Oldest gordon-doc-converter that implements the HTML contract in docs/fidelity.md. */
+export const MINIMUM_CONVERTER_VERSION = '1.0.0';
+
 /**
- * Locate the `gordon-doc` CLI: `DOCFORGE_GORDON_DOC`, then `gordon-doc` on PATH, then the
- * sibling `gordon-doc-converter` checkout used during development.
+ * Check the output of `gordon-doc version` (for example `gordon-doc 1.0.0`). Releases before
+ * 1.0.0 silently drop headers, footers and the table of contents. Output without a version
+ * number is accepted: export verification still catches a degraded DOCX.
+ */
+export function checkConverterVersion(output: string): void {
+  const match = /(\d+)\.(\d+)\.(\d+)/.exec(output);
+  if (match && Number(match[1]) < 1) {
+    throw new ToolError(
+      `gordon-doc ${match[0]} is too old: DocForge needs gordon-doc-converter ${MINIMUM_CONVERTER_VERSION} or later ` +
+        '(pip install --upgrade gordon-doc-converter).',
+    );
+  }
+}
+
+const checked = new Set<string>();
+
+/**
+ * Locate the `gordon-doc` CLI: `DOCFORGE_GORDON_DOC` if set, otherwise `gordon-doc` on PATH.
+ * Nothing else is searched, so an installed DocForge never runs a program from a folder the
+ * user did not choose.
  */
 export async function findGordonDoc(): Promise<string> {
   const configured = process.env.DOCFORGE_GORDON_DOC;
-  if (configured) {
-    if (!existsSync(configured)) throw new ToolError(`DOCFORGE_GORDON_DOC points to a missing file: ${configured}`);
-    return configured;
+  if (configured && !existsSync(configured)) {
+    throw new ToolError(`DOCFORGE_GORDON_DOC points to a missing file: ${configured}`);
   }
+  const executable = configured || 'gordon-doc';
+  if (checked.has(executable)) return executable;
+  let version: ToolResult;
   try {
-    await run('gordon-doc', ['version'], 20_000);
-    return 'gordon-doc';
-  } catch {
-    // fall through to the development checkout
+    version = await run(executable, ['version'], 20_000);
+  } catch (error) {
+    if (configured) throw error;
+    throw new ToolError(
+      `gordon-doc was not found. Install gordon-doc-converter ${MINIMUM_CONVERTER_VERSION} or later ` +
+        '(pip install "gordon-doc-converter[images]") and put gordon-doc on PATH, or set DOCFORGE_GORDON_DOC to its full path.',
+    );
   }
-  const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-  const sibling = resolve(root, '..', 'gordon-doc-converter', '.venv');
-  for (const candidate of [join(sibling, 'Scripts', 'gordon-doc.exe'), join(sibling, 'bin', 'gordon-doc')]) {
-    if (existsSync(candidate)) return candidate;
-  }
-  throw new ToolError(
-    'gordon-doc was not found. Install gordon-doc-converter (pip install gordon-doc-converter[word,images]) ' +
-      'and put gordon-doc on PATH, or set DOCFORGE_GORDON_DOC to its full path.',
-  );
+  checkConverterVersion(version.stdout);
+  checked.add(executable);
+  return executable;
 }
 
 /**

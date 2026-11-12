@@ -35,7 +35,7 @@ plain string or an array of runs:
 | `paragraph` | `text` (inline) |
 | `list` | `ordered?`, `items`: strings or `{ text, children? }`, nested to any depth |
 | `table` | `columns`: `[{ header, width }]` (widths are percentages and must add up to 100), `rows`: arrays of inline cells, one per column; `headerColumn?` makes the first cell of each row bold; `caption?` |
-| `image` | `src` (relative to the JSON file), `alt` (required), `caption?`, `width?` (percent) |
+| `image` | `src` (relative to the JSON file, inside its folder or a subfolder; no `..`, absolute paths or URLs), `alt` (required), `caption?`, `width?` (percent) |
 | `quote` | `text` (inline) |
 | `code` | `text`, `language?` |
 | `pageBreak` | — |

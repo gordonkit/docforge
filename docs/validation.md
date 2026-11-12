@@ -16,6 +16,7 @@ Validation runs in three layers. Each produces messages an AI author can act on.
 | `table-width-sum` | error | Column widths do not add up to 100. |
 | `image-missing` | error | Image file not found relative to the JSON file. |
 | `image-remote` | error | Image `src` is a URL; download it next to the document. |
+| `image-outside-document` | error | Image `src` is an absolute path or leaves the folder of the JSON file (for example `../logo.png`). Copy the image into that folder. |
 | `multiple-h1` | warning | More than one level-1 heading. |
 | `heading-level-skip` | warning | A heading jumps more than one level (for example 1 → 3). |
 | `table-too-wide` | warning | More than 6 columns; unlikely to fit A4 portrait. |
