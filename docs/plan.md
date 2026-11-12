@@ -19,9 +19,8 @@ Working and verified in Word:
 
 ## Next
 
-- First tagged release.
-- After that, the gaps in [`limitations.md`](limitations.md) are the candidates for new work;
-  open an issue to say which ones matter to you.
+- The gaps in [`limitations.md`](limitations.md) are the candidates for new work; open an
+  issue to say which ones matter to you.
 
 ## Native renderer (only if needed)
 

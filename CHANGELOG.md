@@ -6,7 +6,9 @@ All notable changes are listed here. The format follows
 
 ## [Unreleased]
 
-First public release candidate, `0.1.0`.
+## [0.1.0] - 2026-11-12
+
+First tagged release.
 
 ### Added
 
@@ -35,4 +37,5 @@ First public release candidate, `0.1.0`.
 - Node.js 24+, Pandoc (tested with 3.13; the 3.1.3 packaged by Ubuntu 24.04 drops footnotes),
   and gordon-doc-converter 1.0.0 or later.
 
-[Unreleased]: https://github.com/gordonkit/docforge/commits/main
+[Unreleased]: https://github.com/gordonkit/docforge/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/gordonkit/docforge/releases/tag/v0.1.0

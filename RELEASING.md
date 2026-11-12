@@ -21,6 +21,6 @@ The documentation site deploys on every push to `main` (see `docs/deploy-site.md
 - [x] Minimum gordon-doc-converter version (1.0.0) released and documented in `docs/cli.md`.
 - [x] Documentation site deployed from CI.
 - [ ] Re-scan the history for private data right before the switch.
-- [ ] First tagged release (`v0.1.0`).
+- [x] First tagged release (`v0.1.0`).
 - [ ] Switch the repository to public; then remove `"private": true` from `package.json` only if
       the package is going to be published to npm.
