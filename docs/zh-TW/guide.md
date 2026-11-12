@@ -27,7 +27,7 @@ docforge preview <document.json> [--output-dir <目錄>] [--engine word-com|libr
 ## 環境需求
 
 - `gordon-doc` 1.0.0 以上：`pip install "gordon-doc-converter[images]"`。若設定了環境變數 `DOCFORGE_GORDON_DOC` 就執行它指向的檔案，否則執行 `PATH` 上的 `gordon-doc`，不會到其他位置尋找。版本低於 1.0.0 時 DocForge 會拒絕執行並提示升級。
-- **Pandoc** 必須在 `PATH` 上。沒有時 `gordon-doc` 會悄悄改用較弱的引擎而遺失頁首、目錄等，所以 DocForge 會直接拒絕匯出。
+- **Pandoc** 必須在 `PATH` 上。沒有時 `gordon-doc` 會悄悄改用較弱的引擎而遺失頁首、目錄等，所以 DocForge 會直接拒絕匯出。DocForge 以 Pandoc 3.13 測試；舊版會遺失內容，例如 Ubuntu 24.04 套件庫的 Pandoc 3.1.3 會丟掉註腳（匯出驗證會回報 DOCX 降級），請從 [pandoc.org](https://pandoc.org/installing.html) 安裝新版。
 - Windows 預覽：安裝 Word 並加裝 `word` 附加套件（`pip install "gordon-doc-converter[word,images]"`）。
 
 ## 文件格式（schema v1）

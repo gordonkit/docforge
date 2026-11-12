@@ -32,6 +32,7 @@ First public release candidate, `0.1.0`.
 
 ### Requirements
 
-- Node.js 24+, Pandoc, and gordon-doc-converter 1.0.0 or later.
+- Node.js 24+, Pandoc (tested with 3.13; the 3.1.3 packaged by Ubuntu 24.04 drops footnotes),
+  and gordon-doc-converter 1.0.0 or later.
 
 [Unreleased]: https://github.com/gordonkit/docforge/commits/main

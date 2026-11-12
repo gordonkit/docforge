@@ -140,7 +140,10 @@ export async function exportDocx(document: DocForgeDocument, options: ExportOpti
   }
   if (problems.length > 0) {
     await rm(output, { force: true });
-    throw new ExportError(`the converter produced a degraded DOCX (removed): ${problems.join('; ')}`);
+    throw new ExportError(
+      `the converter produced a degraded DOCX (removed): ${problems.join('; ')}. ` +
+        'An old Pandoc is the usual cause; DocForge is tested with Pandoc 3.13.',
+    );
   }
   return { output, verified };
 }
