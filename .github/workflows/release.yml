@@ -81,8 +81,9 @@ jobs:
         run: gh release create "$TAG" "gordonkit-docforge-${TAG#v}.tgz" --draft --title "$TAG" --notes-file release-notes.md --verify-tag
       - id: npm
         name: Decide whether to publish to npm
-        # package.json stays private until the owner decides to publish (RELEASING.md).
-        run: echo "publish=$(node -p "require('./package.json').private ? 'false' : 'true'")" >> "$GITHUB_OUTPUT"
+        # A package.json marked private is never published.
+        run: |
+          echo "publish=$(node -p "require('./package.json').private ? 'false' : 'true'")" >> "$GITHUB_OUTPUT"
       - name: Publish to npm
         if: steps.npm.outputs.publish == 'true'
         # Trusted publishing: npm exchanges the workflow's OIDC token, so no secret is stored.
