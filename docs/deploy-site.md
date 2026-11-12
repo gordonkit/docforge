@@ -11,6 +11,11 @@ documentation site (top bar, grouped side menu, search, language menu, light/dar
 search reads `search-index.json`, which the build writes, so the Content-Security-Policy in
 `site/public/_headers` allows scripts and requests from the site's own origin only.
 
+Every page carries a JSON-LD block (`structuredData` in `site/build.mjs`): a `WebSite` and a
+`TechArticle` whose `publisher` is the GordonKit `Organization`
+(`https://gordonkit.com/#organization`), the same `@id` gordonkit.com uses. It is data, not a
+script, so the Content-Security-Policy does not apply to it.
+
 ## How it deploys
 
 The `deploy-documentation` job in `.github/workflows/ci.yml` runs on every push to `main` after

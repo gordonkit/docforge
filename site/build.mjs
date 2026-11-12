@@ -106,6 +106,40 @@ function descriptionOf(markdown) {
 
 const logo = 'DocForge <span>Docs</span>';
 
+// The same @id values gordonkit.com uses for its Organization and for this site, so the two
+// entity graphs join.
+const parentOrganization = { id: 'https://gordonkit.com/#organization', name: 'GordonKit', url: 'https://gordonkit.com/' };
+const websiteId = `${siteUrl}/#website`;
+
+function structuredData(page, headline, description) {
+  const publisher = { '@id': parentOrganization.id };
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'Organization', '@id': parentOrganization.id, name: parentOrganization.name, url: parentOrganization.url },
+      { '@type': 'WebSite', '@id': websiteId, name: 'DocForge Documentation', url: `${siteUrl}/`, publisher },
+      {
+        '@type': 'TechArticle',
+        headline,
+        description,
+        inLanguage: page.locale,
+        url: `${siteUrl}${page.url}`,
+        isPartOf: { '@id': websiteId },
+        publisher,
+        about: {
+          // codeRepository belongs to SoftwareSourceCode, not SoftwareApplication; the package is both.
+          '@type': ['SoftwareApplication', 'SoftwareSourceCode'],
+          name: 'DocForge',
+          applicationCategory: 'DeveloperApplication',
+          operatingSystem: 'Windows, Linux, macOS',
+          codeRepository: repoUrl,
+          publisher,
+        },
+      },
+    ],
+  }).replaceAll('<', '\\u003c');
+}
+
 function navHtml(page) {
   const own = pages.filter((item) => item.locale === page.locale);
   return [...new Set(own.map((item) => item.group))]
@@ -184,6 +218,7 @@ ${alternates}
 <meta property="og:url" content="${siteUrl}${page.url}">
 <meta property="og:type" content="website">
 <meta name="robots" content="index, follow">
+<script type="application/ld+json">${structuredData(page, titleOf(markdown), description)}</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/style.css">
 <script src="/site.js"></script>

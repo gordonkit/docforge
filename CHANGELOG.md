@@ -6,6 +6,11 @@ All notable changes are listed here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Every page of the documentation site carries JSON-LD that names GordonKit as its publisher,
+  with the same identifiers gordonkit.com uses.
+
 ## [0.1.3] - 2026-11-12
 
 The first release published entirely by the release workflow. The CLI, the package contents
