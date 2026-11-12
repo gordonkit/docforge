@@ -1,6 +1,6 @@
 # DocForge
 
-> **Status: early release (v0.1.2).** The CLI, schema, lint and DOCX export work and are
+> **Status: early release (v0.1.3).** The CLI, schema, lint and DOCX export work and are
 > verified in Word. See the [roadmap](docs/plan.md) and [changelog](CHANGELOG.md).
 
 DocForge is an AI-ready framework for creating consistent, **editable Word (DOCX)**

@@ -2,7 +2,7 @@
 
 [English](README.md) · 繁體中文
 
-> **狀態：早期版本（v0.1.2）。** CLI、schema、lint 與 DOCX 匯出已可使用，並在 Word 中驗證過。詳見[路線圖](docs/plan.md)與[變更紀錄](CHANGELOG.md)。
+> **狀態：早期版本（v0.1.3）。** CLI、schema、lint 與 DOCX 匯出已可使用，並在 Word 中驗證過。詳見[路線圖](docs/plan.md)與[變更紀錄](CHANGELOG.md)。
 
 DocForge 是一個讓 AI 能穩定產生**可編輯 Word（DOCX）**文件的框架，是 [SlideForge](https://github.com/gordonkit/slideforge)（HTML/CSS → PPTX）的文件版姊妹專案：AI 只撰寫嚴格驗證的 JSON 內容，由 DocForge 負責渲染、預覽、lint 與匯出。
 

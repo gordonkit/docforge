@@ -6,6 +6,18 @@ All notable changes are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-11-12
+
+The first release published entirely by the release workflow. The CLI, the package contents
+and the container image are the same as in 0.1.2.
+
+### Changed
+
+- The npm package is published through trusted publishing (GitHub OIDC) and carries a
+  provenance statement. 0.1.2 was published by hand and has none.
+- The release workflow can be run by hand for an existing tag to finish a release that stopped
+  half-way; steps whose result already exists are skipped.
+
 ## [0.1.2] - 2026-11-12
 
 The first release on npm and as a container image. The CLI behaves as in 0.1.0. There is no
@@ -57,6 +69,7 @@ First tagged release.
 - Node.js 24+, Pandoc (tested with 3.13; the 3.1.3 packaged by Ubuntu 24.04 drops footnotes),
   and gordon-doc-converter 1.0.0 or later.
 
-[Unreleased]: https://github.com/gordonkit/docforge/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/gordonkit/docforge/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/gordonkit/docforge/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/gordonkit/docforge/compare/v0.1.0...v0.1.2
 [0.1.0]: https://github.com/gordonkit/docforge/releases/tag/v0.1.0
