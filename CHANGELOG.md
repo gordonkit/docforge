@@ -6,9 +6,10 @@ All notable changes are listed here. The format follows
 
 ## [Unreleased]
 
-## [0.1.1] - 2026-11-12
+## [0.1.2] - 2026-11-12
 
-The first release on npm and as a container image. The CLI behaves as in 0.1.0.
+The first release on npm and as a container image. The CLI behaves as in 0.1.0. There is no
+0.1.1: that tag exists, but its release workflow failed to start and published nothing.
 
 ### Changed
 
@@ -56,6 +57,6 @@ First tagged release.
 - Node.js 24+, Pandoc (tested with 3.13; the 3.1.3 packaged by Ubuntu 24.04 drops footnotes),
   and gordon-doc-converter 1.0.0 or later.
 
-[Unreleased]: https://github.com/gordonkit/docforge/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/gordonkit/docforge/compare/v0.1.0...v0.1.1
+[Unreleased]: https://github.com/gordonkit/docforge/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/gordonkit/docforge/compare/v0.1.0...v0.1.2
 [0.1.0]: https://github.com/gordonkit/docforge/releases/tag/v0.1.0

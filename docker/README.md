@@ -7,10 +7,10 @@ image and targets `linux/amd64`. It replaces the local Pandoc, Python and LibreO
 
 ## Published image
 
-Release tags from 0.1.1 publish the image to Docker Hub as
+Release tags from 0.1.2 publish the image to Docker Hub as
 [`gordonkit/docforge`](https://hub.docker.com/r/gordonkit/docforge) and to GitHub Container
-Registry as `ghcr.io/gordonkit/docforge`. Both receive the same image. A tag such as `v0.1.1`
-publishes the image tags `0.1.1`, `0.1` and `latest`; the image tag matches the npm package
+Registry as `ghcr.io/gordonkit/docforge`. Both receive the same image. A tag such as `v0.1.2`
+publishes the image tags `0.1.2`, `0.1` and `latest`; the image tag matches the npm package
 version. Either name works in the commands below.
 
 To use it without cloning this repository, mount the folder that holds the document at

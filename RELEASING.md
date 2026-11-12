@@ -8,7 +8,9 @@ Steps for maintainers. Contributors do not need this file.
 2. Move the `[Unreleased]` entries in `CHANGELOG.md` under the new version and date, and add
    the compare link.
 3. Set `version` in `package.json` (and `package-lock.json` with `npm install --package-lock-only`).
-4. Run `npm run check:release -- --tag vX.Y.Z` and `npm run test:package`.
+4. Run `npm run check:release -- --tag vX.Y.Z` and `npm run test:package`. After changing a
+   workflow file, lint it with [actionlint](https://github.com/rhysd/actionlint):
+   `release.yml` runs only on a tag, so CI does not catch a mistake in it.
 5. Commit, then tag and push: `git tag -a vX.Y.Z -m "vX.Y.Z"` and `git push origin vX.Y.Z`.
 
 The tag starts `.github/workflows/release.yml`. It repeats the checks, creates the GitHub

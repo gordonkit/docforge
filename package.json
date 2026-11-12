@@ -1,6 +1,6 @@
 {
   "name": "@gordonkit/docforge",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An AI-ready framework for creating consistent, editable Word (DOCX) documents from structured content.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
