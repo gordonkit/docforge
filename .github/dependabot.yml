@@ -8,6 +8,10 @@ updates:
     directory: /docker
     schedule:
       interval: monthly
+    ignore:
+      # The project targets Node.js 24 (package.json engines); move to a new major by hand.
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: npm
     directories:
       - /
