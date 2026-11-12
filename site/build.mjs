@@ -35,7 +35,39 @@ const byRepoPath = new Map(pages.map((page) => [page.source, page]));
 const escapeHtml = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const slug = (text) => text.toLowerCase().replace(/<[^>]+>/g, '').replace(/[^\p{L}\p{N}\s-]/gu, '').trim().replace(/\s+/g, '-');
 
+const repoUrl = 'https://github.com/gordonkit/docforge';
+const locales = [
+  { value: 'en', short: 'EN', label: 'English', home: '/' },
+  { value: 'zh-TW', short: '繁中', label: '繁體中文', home: '/zh-TW/' },
+];
+const labels = {
+  en: { search: 'Search documentation', close: 'Close search', onPage: 'On this page', menu: 'Open navigation', copy: 'Copy code', copied: 'Copied', previous: 'Previous', next: 'Next', results: 'Search results', noResults: 'No matching documentation', license: 'Apache License 2.0', notices: 'Third-party notices', language: 'Change language', theme: 'Toggle theme', parent: 'A GordonKit project:' },
+  'zh-TW': { search: '搜尋文件', close: '關閉搜尋', onPage: '本頁內容', menu: '開啟導覽', copy: '複製程式碼', copied: '已複製', previous: '上一頁', next: '下一頁', results: '搜尋結果', noResults: '找不到符合的文件', license: 'Apache 2.0 授權', notices: '第三方授權聲明', language: '切換語言', theme: '切換主題', parent: 'GordonKit 旗下網站：' },
+};
+
+// Heroicons 24 outline paths (MIT), the icon set the SlideForge documentation site uses.
+const iconPaths = {
+  bars: 'M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5',
+  check: 'm4.5 12.75 6 6 9-13.5',
+  chevronDown: 'm19.5 8.25-7.5 7.5-7.5-7.5',
+  chevronLeft: 'M15.75 19.5 8.25 12l7.5-7.5',
+  chevronRight: 'm8.25 4.5 7.5 7.5-7.5 7.5',
+  clipboard: 'M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5A3.375 3.375 0 0 0 6.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 0 0-9-9Z',
+  code: 'M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5',
+  document: 'M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z',
+  language: 'm10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802',
+  search: 'm21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z',
+  moon: 'M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z',
+  sun: 'M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z',
+  close: 'M6 18 18 6M6 6l12 12',
+};
+const icon = (name, extra = '') =>
+  `<svg class="icon${extra ? ` ${extra}` : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="${iconPaths[name]}"/></svg>`;
+
 let currentSource = '';
+let currentLocale = 'en';
+/** @type {{ id: string, text: string }[]} */
+let currentToc = [];
 const marked = new Marked({
   gfm: true,
   walkTokens(token) {
@@ -48,7 +80,14 @@ const marked = new Marked({
   renderer: {
     heading({ tokens, depth }) {
       const html = this.parser.parseInline(tokens);
-      return `<h${depth} id="${slug(html)}">${html}</h${depth}>\n`;
+      const id = slug(html);
+      if (depth === 2) currentToc.push({ id, text: html.replace(/<[^>]+>/g, '') });
+      return `<h${depth} id="${id}">${html}</h${depth}>\n`;
+    },
+    code({ text, lang }) {
+      const t = labels[currentLocale];
+      const language = lang ? ` class="language-${escapeHtml(lang)}"` : '';
+      return `<div class="code"><button class="copy" type="button" data-copied="${t.copied}">${icon('clipboard', 'small')}<span>${t.copy}</span></button><pre><code${language}>${escapeHtml(text)}</code></pre></div>\n`;
     },
   },
 });
@@ -65,28 +104,66 @@ function descriptionOf(markdown) {
   return (text || fallback).slice(0, 200);
 }
 
+const logo = 'DocForge <span>Docs</span>';
+
 function navHtml(page) {
   const own = pages.filter((item) => item.locale === page.locale);
-  const groups = [...new Set(own.map((item) => item.group))];
-  const sections = groups
+  return [...new Set(own.map((item) => item.group))]
     .map((group) => {
       const links = own
         .filter((item) => item.group === group)
-        .map((item) => `<a class="item" href="${item.url}"${item.url === page.url ? ' aria-current="page"' : ''}>${escapeHtml(item.label)}</a>`)
+        .map((item) => `<a href="${item.url}"${item.url === page.url ? ' aria-current="page"' : ''}>${escapeHtml(item.label)}</a>`)
         .join('');
-      return `<h2>${escapeHtml(group)}</h2>${links}`;
+      return `<div class="nav-group"><p>${escapeHtml(group)}</p>${links}</div>`;
     })
     .join('');
-  const switcher =
-    page.locale === 'en'
-      ? '<h2>Language</h2><a class="item" href="/zh-TW/">繁體中文</a>'
-      : '<h2>語言</h2><a class="item" href="/">English</a>';
-  return `<a class="brand" href="${page.locale === 'en' ? '/' : '/zh-TW/'}">DocForge</a>${sections}${switcher}<h2>Source</h2><a class="item" href="https://github.com/gordonkit/docforge">GitHub</a>`;
+}
+
+function headerHtml(page) {
+  const t = labels[page.locale];
+  const current = locales.find((item) => item.value === page.locale);
+  const options = locales
+    .map((item) => `<a role="menuitemradio" aria-checked="${item === current}" lang="${item.value}" href="${item.home}">${item.label}${item === current ? icon('check', 'small') : ''}</a>`)
+    .join('');
+  return `<header class="topbar"><div class="topbar-inner">
+<button class="menu-button" type="button" data-menu-open aria-label="${t.menu}">${icon('bars')}</button>
+<a class="logo" href="${current.home}">${logo}</a>
+<button class="search-button" type="button" data-search-open>${icon('search', 'small')}<span>${t.search}</span></button>
+<div class="tools">
+<div class="locale"><button class="icon-button" type="button" aria-label="${t.language}" aria-haspopup="menu" aria-expanded="false">${icon('language')}<span class="short">${current.short}</span>${icon('chevronDown', 'tiny chevron')}</button><div class="locale-menu" role="menu" aria-label="${t.language}" hidden>${options}</div></div>
+<button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="${t.theme}">${icon('sun', 'sun')}${icon('moon', 'moon')}</button>
+<a class="icon-button" href="${repoUrl}" aria-label="GitHub">${icon('code')}</a>
+</div>
+</div></header>`;
+}
+
+function pagerHtml(page) {
+  const t = labels[page.locale];
+  const own = pages.filter((item) => item.locale === page.locale);
+  const index = own.indexOf(page);
+  const previous = own[index - 1];
+  const next = own[index + 1];
+  if (!previous && !next) return '';
+  const link = (item, direction, label) => {
+    const text = `<span><small>${label}</small><strong>${escapeHtml(item.label)}</strong></span>`;
+    return `<a class="${direction}" href="${item.url}">${direction === 'previous' ? icon('chevronLeft') + text : text + icon('chevronRight')}</a>`;
+  };
+  return `<nav class="pager">${previous ? link(previous, 'previous', t.previous) : '<span></span>'}${next ? link(next, 'next', t.next) : ''}</nav>`;
 }
 
 function pageHtml(page, markdown) {
   currentSource = page.source;
-  const body = marked.parse(markdown);
+  currentLocale = page.locale;
+  currentToc = [];
+  const t = labels[page.locale];
+  const eyebrow = `<p class="eyebrow">${icon('document', 'small')}${escapeHtml(page.group)}</p>`;
+  // The title and the paragraph after it form the page head, as on the SlideForge site.
+  const body = marked
+    .parse(markdown)
+    .replace(/<table>/g, '<div class="table-wrap"><table>')
+    .replace(/<\/table>/g, '</table></div>')
+    .replace(/^(<h1[^>]*>[\s\S]*?<\/h1>\n(?:<p>[\s\S]*?<\/p>\n)?)/, (head) => `<div class="page-head">${eyebrow}${head}</div>\n`);
+  const toc = currentToc.map((item) => `<a href="#${item.id}">${item.text}</a>`).join('');
   const title = page.url === '/' ? 'DocForge: editable Word documents from strict JSON' : page.url === '/zh-TW/' ? 'DocForge：用嚴格 JSON 產生可編輯的 Word 文件' : `${titleOf(markdown)} | DocForge`;
   const description = descriptionOf(markdown);
   const alternates =
@@ -109,20 +186,27 @@ ${alternates}
 <meta name="robots" content="index, follow">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/style.css">
+<script src="/site.js"></script>
 </head>
 <body>
-<div class="layout"><nav>${navHtml(page)}</nav><main>
-${body}
-<footer>DocForge is published by GordonKit under the Apache License 2.0.</footer>
-</main></div>
+${headerHtml(page)}
+<aside class="sidebar"><div class="sidebar-head"><span class="logo">${logo}</span><button class="icon-button" type="button" data-menu-close aria-label="${t.close}">${icon('close')}</button></div><nav>${navHtml(page)}</nav></aside>
+<button class="overlay" type="button" data-menu-close aria-label="${t.close}" hidden></button>
+<main><article>
+${body}${pagerHtml(page)}
+</article>
+<footer class="site-footer"><a href="${repoBlob}LICENSE">${t.license}</a><a href="${repoBlob}THIRD_PARTY_NOTICES.md">${t.notices}</a><span>${t.parent} <a href="https://gordonkit.com/${page.locale}/">gordonkit.com</a></span></footer>
+</main>
+${toc ? `<aside class="toc"><p>${t.onPage}</p><nav>${toc}</nav></aside>` : ''}
+<div class="search" role="dialog" aria-modal="true" aria-label="${t.search}" data-results="${t.results}" data-empty="${t.noResults}" hidden><div class="search-panel"><div class="search-field">${icon('search')}<input type="search" placeholder="${t.search}" aria-label="${t.search}"><button class="icon-button" type="button" data-search-close aria-label="${t.close}">${icon('close')}</button></div><div class="search-results"></div></div></div>
 </body>
 </html>
 `;
 }
 
 const notFound = `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | DocForge</title><meta name="robots" content="noindex"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"></head>
-<body><main><h1>Page not found</h1><p><a href="/">Back to the DocForge documentation</a></p></main></body></html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | DocForge</title><meta name="robots" content="noindex"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script src="/site.js"></script></head>
+<body><main class="plain"><h1>Page not found</h1><p><a href="/">Back to the DocForge documentation</a></p></main></body></html>
 `;
 
 function llmsText() {
@@ -153,12 +237,24 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 await cp(join(here, 'public'), dist, { recursive: true });
 
+const unescapeHtml = (text) => text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+const searchIndex = [];
 for (const page of pages) {
   const markdown = (await readFile(join(root, page.source), 'utf8')).replace(/\r\n/g, '\n');
   const target = join(dist, page.url, 'index.html');
   await mkdir(dirname(target), { recursive: true });
-  await writeFile(target, pageHtml(page, markdown), 'utf8');
+  const html = pageHtml(page, markdown);
+  await writeFile(target, html, 'utf8');
+  const article = html.slice(html.indexOf('<article>'), html.includes('<nav class="pager">') ? html.indexOf('<nav class="pager">') : html.indexOf('</article>'));
+  searchIndex.push({
+    locale: page.locale,
+    url: page.url,
+    title: page.label,
+    summary: descriptionOf(markdown),
+    text: unescapeHtml(`${page.label} ${article.replace(/<button[\s\S]*?<\/button>/g, '').replace(/<[^>]+>/g, ' ')}`).replace(/\s+/g, ' ').toLowerCase(),
+  });
 }
+await writeFile(join(dist, 'search-index.json'), JSON.stringify(searchIndex), 'utf8');
 await writeFile(join(dist, '404.html'), notFound, 'utf8');
 await writeFile(
   join(dist, 'sitemap.xml'),

@@ -8,7 +8,9 @@ relicense them.
 
 The production inventory is generated from the checked-in `package-lock.json` and the installed
 package manifests. License files are reproduced verbatim. No third-party source is copied into
-this repository.
+this repository, with one exception: the documentation site (`site/build.mjs`) embeds a few
+icon outlines from [Heroicons](https://heroicons.com/) (MIT, Copyright (c) Tailwind Labs, Inc.;
+the MIT terms are the ones reproduced under fflate below). They are not part of the npm package.
 
 ## External tools (not bundled)
 

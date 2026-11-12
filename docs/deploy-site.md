@@ -6,6 +6,11 @@ The site in `site/` is built from `README.md` and `docs/` by `site/build.mjs`
 [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/): no Worker
 script, only the files in `site/dist/`.
 
+The pages are static HTML. `site/public/style.css` and `site/public/site.js` follow the SlideForge
+documentation site (top bar, grouped side menu, search, language menu, light/dark theme). The
+search reads `search-index.json`, which the build writes, so the Content-Security-Policy in
+`site/public/_headers` allows scripts and requests from the site's own origin only.
+
 ## How it deploys
 
 The `deploy-documentation` job in `.github/workflows/ci.yml` runs on every push to `main` after

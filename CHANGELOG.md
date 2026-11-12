@@ -20,7 +20,9 @@ First public release candidate, `0.1.0`.
 - Lint with JSON output, and DOCX export verification.
 - AI authoring skill in `skills/docforge/SKILL.md`.
 - Documentation in English, a zh-TW README and guide, and a documentation site at
-  <https://docforge.gordonkit.com/>.
+  <https://docforge.gordonkit.com/>. The site shares the SlideForge documentation look: top bar
+  with search, language menu and light/dark toggle, grouped side menu, "On this page" list and
+  previous/next links.
 - CONTRIBUTING, SECURITY, THIRD_PARTY_NOTICES and CI (type check, build, test, audit, site
   link check).
 
