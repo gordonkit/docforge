@@ -28,6 +28,12 @@ Build first (`npm run build`), then run `node dist/cli/index.js <command>`.
 
 **Converter version.** DocForge needs gordon-doc-converter 1.0.0 or later, which adds header/footer meta, `div.toc` and the Word fidelity fixes. Earlier releases drop headers, footers and the table of contents, so DocForge refuses to run a `gordon-doc` older than 1.0.0 and tells you to upgrade.
 
+## Container
+
+The repository builds a container image with Node.js, Pandoc, gordon-doc and LibreOffice, so
+none of the requirements above need to be installed. It cannot use Word, so previews are
+rendered by LibreOffice. See [`docker/README.md`](../docker/README.md).
+
 ## Exit codes
 
 0 success, 1 operation or validation failure, 2 invalid CLI usage.

@@ -25,7 +25,8 @@ node dist/cli/index.js preview document.json --engine word-com
 
 Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
 [gordon-doc](https://github.com/gordonkit/gordon-doc-converter) 1.0.0 or later
-(`pip install "gordon-doc-converter[images]"`). See [`docs/cli.md`](docs/cli.md).
+(`pip install "gordon-doc-converter[images]"`), or build the [container image](docker/README.md),
+which has all of them. See [`docs/cli.md`](docs/cli.md).
 
 ## Principles
 

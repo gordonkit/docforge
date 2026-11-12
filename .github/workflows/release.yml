@@ -1,13 +1,39 @@
 name: Release
-# A tag vX.Y.Z creates the GitHub release and, once package.json is no longer private,
-# publishes @gordonkit/docforge to npm. See RELEASING.md.
+# A tag vX.Y.Z creates the GitHub release. It publishes @gordonkit/docforge to npm once
+# package.json is no longer private, and the container image once the DOCKERHUB_NAMESPACE
+# repository variable is set. See RELEASING.md.
 on:
   push:
     tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 permissions:
   contents: read
 jobs:
+  container-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check the Docker Hub configuration
+        # Fails before anything is published, so a half-configured repository cannot leave a
+        # release without its image.
+        if: vars.DOCKERHUB_NAMESPACE != ''
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          test -n "$DOCKERHUB_USERNAME" || { echo "Set the DOCKERHUB_USERNAME secret" >&2; exit 1; }
+          test -n "$DOCKERHUB_TOKEN" || { echo "Set the DOCKERHUB_TOKEN secret" >&2; exit 1; }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: docker compose -f docker/compose.yaml --profile cli build cli
+      # The checkout belongs to the runner user, so the container runs as that user to write to /work.
+      - name: Export the bundled example in the container
+        run: >-
+          docker compose -f docker/compose.yaml --profile cli run --rm --user "$(id -u):$(id -g)"
+          cli export /work/examples/report.json --output /work/report.docx
+
   publish:
+    needs: container-smoke
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment:
@@ -65,3 +91,48 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release edit "$TAG" --draft=false
+
+  publish-container:
+    # Opt-in: runs only when the DOCKERHUB_NAMESPACE repository variable is set.
+    if: vars.DOCKERHUB_NAMESPACE != ''
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write # push to GitHub Container Registry
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - id: metadata
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: |
+            ${{ vars.DOCKERHUB_NAMESPACE }}/docforge
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
+      - name: Build and push the image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          file: docker/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          sbom: true
+          provenance: mode=max

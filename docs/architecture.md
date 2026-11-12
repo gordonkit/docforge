@@ -45,6 +45,7 @@ code backgrounds and list indents still come from the converter.
 | `src/cli/run.ts` | `init`, `check`, `build`, `export`, `preview` (`src/cli/index.ts` is the executable entry) |
 | `src/exporters/style.ts` | Applies template tokens to DOCX styles and margins |
 | `skills/docforge/` | AI authoring skill |
+| `docker/` | Container image: the CLI on top of the gordon-doc-converter image, plus Pandoc |
 
 ## Known pitfalls to design for
 

@@ -33,6 +33,25 @@ jobs:
           DOCFORGE_REQUIRE_TOOLS: "1"
       - run: npm audit --audit-level=high
 
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: docker compose -f docker/compose.yaml --profile cli build cli
+      # The checkout belongs to the runner user, so the container runs as that user to write to /work.
+      - name: Export the bundled example in the container
+        run: >-
+          docker compose -f docker/compose.yaml --profile cli run --rm --user "$(id -u):$(id -g)"
+          cli export /work/examples/report.json --output /work/report.docx
+      - name: Render preview pages in the container
+        run: >-
+          docker compose -f docker/compose.yaml --profile cli run --rm --user "$(id -u):$(id -g)"
+          cli preview /work/examples/report.json --output-dir /work/report-preview --engine libreoffice
+      - run: test -s report.docx && test -s report-preview/document.pdf && ls report-preview/pages/*.png
+
   documentation:
     runs-on: ubuntu-latest
     timeout-minutes: 10

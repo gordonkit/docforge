@@ -17,6 +17,9 @@ All notable changes are listed here. The format follows
 - `npm run test:package` installs the packed tarball in a clean project and uses it; CI runs it.
 - A release workflow: a version tag creates the GitHub release from the changelog and, once the
   package is no longer private, publishes it to npm with provenance.
+- A container image (`docker/`) with Node.js 24, Pandoc 3.13, gordon-doc 1.0.0 and LibreOffice,
+  built on the gordon-doc-converter image. CI builds it and exports and previews the example in
+  it. It is not published to a registry yet.
 
 ## [0.1.0] - 2026-11-12
 

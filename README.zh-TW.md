@@ -21,7 +21,7 @@ node dist/cli/index.js export document.json --output document.docx
 node dist/cli/index.js preview document.json --engine word-com
 ```
 
-需求：Node.js 24+、[Pandoc](https://pandoc.org/installing.html)、[gordon-doc](https://github.com/gordonkit/gordon-doc-converter) 1.0.0 以上（`pip install "gordon-doc-converter[images]"`）。詳見 [`docs/zh-TW/guide.md`](docs/zh-TW/guide.md)。
+需求：Node.js 24+、[Pandoc](https://pandoc.org/installing.html)、[gordon-doc](https://github.com/gordonkit/gordon-doc-converter) 1.0.0 以上（`pip install "gordon-doc-converter[images]"`）；也可以改用已包含這些工具的[容器映像檔](docker/README.md)。詳見 [`docs/zh-TW/guide.md`](docs/zh-TW/guide.md)。
 
 ## 原則
 
