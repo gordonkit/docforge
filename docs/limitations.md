@@ -18,8 +18,7 @@ supported yet; do not assume it works.
 - Footnotes are plain text.
 - No comments, tracked changes, or cross-references.
 - Pandoc and gordon-doc are external requirements. The container image in `docker/` includes
-  them, but it has no Word: its previews come from LibreOffice with substitute fonts, and it is
-  not published to a registry yet.
+  them, but it has no Word: its previews come from LibreOffice with substitute fonts.
 - Fonts are not embedded; the machine opening the DOCX needs the fonts (CJK text uses an
   East Asian font, `Microsoft JhengHei` by default).
 - Output is verified structurally, not pixel-for-pixel.

@@ -1,6 +1,6 @@
 # Roadmap
 
-DocForge is pre-release (v0.1.0). This page says what works today, what comes next and the
+DocForge is an early release (v0.1.1). This page says what works today, what comes next and the
 decisions behind it. Completed work is listed per release in
 [`CHANGELOG.md`](../CHANGELOG.md); known gaps are in [`limitations.md`](limitations.md).
 

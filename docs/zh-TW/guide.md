@@ -12,7 +12,7 @@ docforge export <document.json> --output document.docx [--overwrite]
 docforge preview <document.json> [--output-dir <目錄>] [--engine word-com|libreoffice] [--json]
 ```
 
-先執行 `npm run build`，再用 `node dist/cli/index.js <指令>`。
+以 `npm install -g @gordonkit/docforge` 安裝，或用 `npx @gordonkit/docforge <指令>` 執行單一指令。在本 repo 的 checkout 中，先執行 `npm ci` 與 `npm run build`，再用 `node dist/cli/index.js <指令>`。
 
 | 指令 | 作用 |
 | --- | --- |

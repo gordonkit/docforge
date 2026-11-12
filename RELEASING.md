@@ -19,31 +19,28 @@ be reused or replaced; fix a bad release with a new patch version.
 
 The documentation site deploys on every push to `main` (see `docs/deploy-site.md`), not on tags.
 
-## Publishing to npm (one time)
+## npm setup
 
 The package is named `@gordonkit/docforge` because the unscoped name `docforge` belongs to
-another project. The command it installs is still `docforge`. Nothing is published while
-`"private": true` is in `package.json`. To start publishing:
+another project. The command it installs is still `docforge`. Publishing from the release
+workflow needs, on npmjs.com:
 
-1. Create the `gordonkit` organization on npmjs.com, if it does not exist.
-2. On npmjs.com, add a trusted publisher for `@gordonkit/docforge`: GitHub Actions, repository
-   `gordonkit/docforge`, workflow `release.yml`, environment `npm`. npm provenance needs the
-   repository to be public.
-3. Remove `"private": true` from `package.json`, add the `npm install` instructions to the
-   README files and `docs/cli.md`, and release a new version.
+- the `gordonkit` organization;
+- a trusted publisher for `@gordonkit/docforge`: GitHub Actions, repository
+  `gordonkit/docforge`, workflow `release.yml`, environment `npm`. No npm token is stored in
+  GitHub, and npm provenance needs the repository to be public.
 
-## Publishing the container image (one time)
+## Container image setup
 
 The release workflow pushes `docker/Dockerfile` to Docker Hub and GitHub Container Registry
-(`ghcr.io/gordonkit/docforge`) with the tags `X.Y.Z`, `X.Y` and `latest`, but only when the
-repository variable `DOCKERHUB_NAMESPACE` is set. To start publishing:
+(`ghcr.io/gordonkit/docforge`) with the tags `X.Y.Z`, `X.Y` and `latest`. It needs, in the
+GitHub repository settings:
 
-1. Create the `docforge` repository under the Docker Hub namespace, and an access token that
-   can write to it.
-2. In the GitHub repository settings, add the secrets `DOCKERHUB_USERNAME` and
-   `DOCKERHUB_TOKEN`, then the variable `DOCKERHUB_NAMESPACE` (for example `gordonkit`).
-3. After the first push, make the GHCR package public and update `docker/README.md`, which
-   says the image is not published.
+- the variable `DOCKERHUB_NAMESPACE` (`gordonkit`). Without it the image job is skipped;
+- the secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`, a Docker Hub access token that can
+  write to `gordonkit/docforge`.
+
+The GHCR package starts private; make it public once in its package settings.
 
 ## Before the repository goes public (one time)
 

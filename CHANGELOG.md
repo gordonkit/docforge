@@ -6,20 +6,24 @@ All notable changes are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-12
+
+The first release on npm and as a container image. The CLI behaves as in 0.1.0.
+
 ### Changed
 
-- The package is renamed `@gordonkit/docforge` in preparation for npm; the command is still
-  `docforge`. It is not published yet.
+- The package is published to npm as `@gordonkit/docforge` (the unscoped name belongs to
+  another project): `npm install -g @gordonkit/docforge`. The command is still `docforge`.
 - `npm run build` clears `dist` first, so files from removed modules cannot end up in the package.
 
 ### Added
 
 - `npm run test:package` installs the packed tarball in a clean project and uses it; CI runs it.
-- A release workflow: a version tag creates the GitHub release from the changelog and, once the
-  package is no longer private, publishes it to npm with provenance.
+- A release workflow: a version tag creates the GitHub release from the changelog, publishes
+  the package to npm with provenance and pushes the container image.
 - A container image (`docker/`) with Node.js 24, Pandoc 3.13, gordon-doc 1.0.0 and LibreOffice,
-  built on the gordon-doc-converter image. CI builds it and exports and previews the example in
-  it. It is not published to a registry yet.
+  built on the gordon-doc-converter image, published as `gordonkit/docforge` on Docker Hub and
+  `ghcr.io/gordonkit/docforge`. CI builds it and exports and previews the example in it.
 
 ## [0.1.0] - 2026-11-12
 
@@ -52,5 +56,6 @@ First tagged release.
 - Node.js 24+, Pandoc (tested with 3.13; the 3.1.3 packaged by Ubuntu 24.04 drops footnotes),
   and gordon-doc-converter 1.0.0 or later.
 
-[Unreleased]: https://github.com/gordonkit/docforge/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/gordonkit/docforge/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/gordonkit/docforge/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/gordonkit/docforge/releases/tag/v0.1.0

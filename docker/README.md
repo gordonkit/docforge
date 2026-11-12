@@ -5,8 +5,33 @@ Pandoc 3.13, gordon-doc 1.0.0, LibreOffice Writer and the Noto CJK fonts. It is 
 [`gordonkit/gordon-doc-converter`](https://hub.docker.com/r/gordonkit/gordon-doc-converter)
 image and targets `linux/amd64`. It replaces the local Pandoc, Python and LibreOffice setup.
 
-The image is not published to a registry yet; build it from this repository with the Compose
-file below. `RELEASING.md` describes how publishing is switched on.
+## Published image
+
+Release tags from 0.1.1 publish the image to Docker Hub as
+[`gordonkit/docforge`](https://hub.docker.com/r/gordonkit/docforge) and to GitHub Container
+Registry as `ghcr.io/gordonkit/docforge`. Both receive the same image. A tag such as `v0.1.1`
+publishes the image tags `0.1.1`, `0.1` and `latest`; the image tag matches the npm package
+version. Either name works in the commands below.
+
+To use it without cloning this repository, mount the folder that holds the document at
+`/work`:
+
+```bash
+docker run --rm --read-only --tmpfs /tmp --security-opt no-new-privileges \
+  --user "$(id -u):$(id -g)" --volume "$PWD:/work" \
+  gordonkit/docforge:latest export /work/document.json --output /work/document.docx
+```
+
+```powershell
+docker run --rm --read-only --tmpfs /tmp --security-opt no-new-privileges `
+  --volume "${PWD}:/work" `
+  gordonkit/docforge:latest export /work/document.json --output /work/document.docx
+```
+
+In Git Bash on Windows, set `MSYS_NO_PATHCONV=1` first; otherwise Git Bash rewrites container
+paths such as `/work/document.json` into Windows paths. Use a version tag instead of `latest`
+when exports must be reproducible. The Compose file below always builds
+`gordonkit/docforge:local` from the current source tree and does not pull the published image.
 
 ## CLI profile
 

@@ -1,6 +1,6 @@
 # DocForge
 
-> **Status: pre-release (v0.1.0).** The CLI, schema, lint and DOCX export work and are
+> **Status: early release (v0.1.1).** The CLI, schema, lint and DOCX export work and are
 > verified in Word. See the [roadmap](docs/plan.md) and [changelog](CHANGELOG.md).
 
 DocForge is an AI-ready framework for creating consistent, **editable Word (DOCX)**
@@ -16,17 +16,17 @@ strict content (JSON) ─► validate + lint ─► HTML ─► gordon-doc (Pand
 ## Quick start
 
 ```bash
-npm install && npm run build
-node dist/cli/index.js init document.json
-node dist/cli/index.js check document.json
-node dist/cli/index.js export document.json --output document.docx
-node dist/cli/index.js preview document.json --engine word-com
+npm install -g @gordonkit/docforge
+docforge init document.json
+docforge check document.json
+docforge export document.json --output document.docx
+docforge preview document.json --engine word-com
 ```
 
 Requires Node.js 24+, [Pandoc](https://pandoc.org/installing.html) and
 [gordon-doc](https://github.com/gordonkit/gordon-doc-converter) 1.0.0 or later
-(`pip install "gordon-doc-converter[images]"`), or build the [container image](docker/README.md),
-which has all of them. See [`docs/cli.md`](docs/cli.md).
+(`pip install "gordon-doc-converter[images]"`), or use the [container image](docker/README.md)
+`gordonkit/docforge`, which has all of them. See [`docs/cli.md`](docs/cli.md).
 
 ## Principles
 

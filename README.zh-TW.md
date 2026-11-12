@@ -2,7 +2,7 @@
 
 [English](README.md) · 繁體中文
 
-> **狀態：預發布版（v0.1.0）。** CLI、schema、lint 與 DOCX 匯出已可使用，並在 Word 中驗證過。詳見[路線圖](docs/plan.md)與[變更紀錄](CHANGELOG.md)。
+> **狀態：早期版本（v0.1.1）。** CLI、schema、lint 與 DOCX 匯出已可使用，並在 Word 中驗證過。詳見[路線圖](docs/plan.md)與[變更紀錄](CHANGELOG.md)。
 
 DocForge 是一個讓 AI 能穩定產生**可編輯 Word（DOCX）**文件的框架，是 [SlideForge](https://github.com/gordonkit/slideforge)（HTML/CSS → PPTX）的文件版姊妹專案：AI 只撰寫嚴格驗證的 JSON 內容，由 DocForge 負責渲染、預覽、lint 與匯出。
 
@@ -14,14 +14,14 @@ DocForge 是一個讓 AI 能穩定產生**可編輯 Word（DOCX）**文件的框
 ## 快速開始
 
 ```bash
-npm install && npm run build
-node dist/cli/index.js init document.json
-node dist/cli/index.js check document.json
-node dist/cli/index.js export document.json --output document.docx
-node dist/cli/index.js preview document.json --engine word-com
+npm install -g @gordonkit/docforge
+docforge init document.json
+docforge check document.json
+docforge export document.json --output document.docx
+docforge preview document.json --engine word-com
 ```
 
-需求：Node.js 24+、[Pandoc](https://pandoc.org/installing.html)、[gordon-doc](https://github.com/gordonkit/gordon-doc-converter) 1.0.0 以上（`pip install "gordon-doc-converter[images]"`）；也可以改用已包含這些工具的[容器映像檔](docker/README.md)。詳見 [`docs/zh-TW/guide.md`](docs/zh-TW/guide.md)。
+需求：Node.js 24+、[Pandoc](https://pandoc.org/installing.html)、[gordon-doc](https://github.com/gordonkit/gordon-doc-converter) 1.0.0 以上（`pip install "gordon-doc-converter[images]"`）；也可以改用已包含這些工具的[容器映像檔](docker/README.md) `gordonkit/docforge`。詳見 [`docs/zh-TW/guide.md`](docs/zh-TW/guide.md)。
 
 ## 原則
 

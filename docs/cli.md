@@ -8,7 +8,9 @@ docforge export <document.json> --output document.docx [--overwrite]
 docforge preview <document.json> [--output-dir <directory>] [--engine word-com|libreoffice] [--json]
 ```
 
-Build first (`npm run build`), then run `node dist/cli/index.js <command>`.
+Install with `npm install -g @gordonkit/docforge`, or run one command with
+`npx @gordonkit/docforge <command>`. In a checkout of this repository, run `npm ci` and
+`npm run build`, then `node dist/cli/index.js <command>`.
 
 | Command | What it does |
 | --- | --- |
@@ -30,8 +32,8 @@ Build first (`npm run build`), then run `node dist/cli/index.js <command>`.
 
 ## Container
 
-The repository builds a container image with Node.js, Pandoc, gordon-doc and LibreOffice, so
-none of the requirements above need to be installed. It cannot use Word, so previews are
+The `gordonkit/docforge` image has Node.js, Pandoc, gordon-doc and LibreOffice, so none of the
+requirements above need to be installed. It cannot use Word, so previews are
 rendered by LibreOffice. See [`docker/README.md`](../docker/README.md).
 
 ## Exit codes
