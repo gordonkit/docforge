@@ -1,7 +1,8 @@
 // Builds the documentation site from README.md and docs/*.md into site/dist.
 // Usage: node build.mjs [--check]  (--check also verifies every internal link)
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { dirname, join, posix, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Marked } from 'marked';
@@ -31,6 +32,14 @@ const pages = [
   { source: 'README.zh-TW.md', url: '/zh-TW/', locale: 'zh-TW', label: '總覽', group: '開始' },
   { source: 'docs/zh-TW/guide.md', url: '/zh-TW/guide/', locale: 'zh-TW', label: '使用指南', group: '開始' },
 ];
+// Last modification date (YYYY-MM-DD) of a source file: its last git commit, else the file's mtime.
+const lastModified = (source) => {
+  try {
+    const iso = execFileSync('git', ['log', '-1', '--format=%cI', '--', source], { cwd: root, encoding: 'utf8' }).trim();
+    if (iso) return iso.slice(0, 10);
+  } catch {}
+  return statSync(join(root, source)).mtime.toISOString().slice(0, 10);
+};
 const byRepoPath = new Map(pages.map((page) => [page.source, page]));
 
 const escapeHtml = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -240,6 +249,13 @@ ${alternates}
 <meta property="og:description" content="${escapeHtml(description)}">
 <meta property="og:url" content="${siteUrl}${page.url}">
 <meta property="og:type" content="website">
+<meta property="og:image" content="${siteUrl}/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtml(title)}">
+<meta name="twitter:description" content="${escapeHtml(description)}">
+<meta name="twitter:image" content="${siteUrl}/og-image.png">
 <meta name="robots" content="index, follow">
 <script type="application/ld+json">${structuredData(page, titleOf(markdown), description)}</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -316,7 +332,7 @@ await writeFile(join(dist, 'search-index.json'), JSON.stringify(searchIndex), 'u
 await writeFile(join(dist, '404.html'), notFound, 'utf8');
 await writeFile(
   join(dist, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((page) => `  <url><loc>${siteUrl}${page.url}</loc></url>`).join('\n')}\n</urlset>\n`,
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((page) => `  <url><loc>${siteUrl}${page.url}</loc><lastmod>${lastModified(page.source)}</lastmod></url>`).join('\n')}\n</urlset>\n`,
   'utf8',
 );
 await writeFile(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`, 'utf8');
