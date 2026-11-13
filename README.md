@@ -55,6 +55,6 @@ open-source projects:
 - [Math Background Studio](https://bg.gordonkit.com/) generates wallpapers and slide backgrounds from
   mathematical patterns and exports them as PNG or SVG.
 
-[繁體中文](README.zh-TW.md)
+[繁體中文](README.zh-TW.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
 Docs: [CLI](docs/cli.md) · [schema](docs/schema.md) · [templates](docs/templates.md) · [validation](docs/validation.md) · [AI workflow](docs/ai-workflow.md) · [limitations](docs/limitations.md) · [fidelity study](docs/fidelity.md) · [architecture](docs/architecture.md) · [roadmap](docs/plan.md) · [changelog](CHANGELOG.md).

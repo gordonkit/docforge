@@ -1,2 +1,8 @@
 /en      /          301
 /en/*    /:splat    301
+/en-au      /en-AU/      301
+/en-au/*    /en-AU/:splat  301
+/zh-cn      /zh-CN/      301
+/zh-cn/*    /zh-CN/:splat  301
+/zh-tw      /zh-TW/      301
+/zh-tw/*    /zh-TW/:splat  301

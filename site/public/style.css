@@ -177,3 +177,5 @@ html.dark .search-field { border-bottom-color: #334155; }
   main { padding-right: 240px; }
   .toc { display: block; }
 }
+html:lang(zh-CN) { --sans: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Noto Sans SC", "Noto Sans CJK SC", sans-serif; }
+html:lang(ja) { --sans: "Segoe UI", "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", "Noto Sans CJK JP", Meiryo, sans-serif; }

@@ -15,22 +15,34 @@ const repoBlob = 'https://github.com/gordonkit/docforge/blob/main/';
 const check = process.argv.includes('--check');
 
 // `description` replaces the one taken from the page's first paragraph, for a page that opens with a list.
-/** @type {{ source: string, url: string, locale: 'en'|'zh-TW', label: string, group: string, description?: string }[]} */
+/** @type {{ source: string, url: string, locale: string, key: string, label: string, group: string, description?: string, spelling?: boolean }[]} */
+const sourcePages = [
+  { source: 'README.md', url: '/', locale: 'en', key: 'home', label: 'Overview', group: 'Start' },
+  { source: 'docs/cli.md', url: '/docs/cli/', locale: 'en', key: '/docs/cli/', label: 'CLI', group: 'Use' },
+  { source: 'docs/schema.md', url: '/docs/schema/', locale: 'en', key: '/docs/schema/', label: 'Document schema', group: 'Use' },
+  { source: 'docs/templates.md', url: '/docs/templates/', locale: 'en', key: '/docs/templates/', label: 'Templates', group: 'Use' },
+  { source: 'docs/validation.md', url: '/docs/validation/', locale: 'en', key: '/docs/validation/', label: 'Validation and lint', group: 'Use' },
+  { source: 'docs/ai-workflow.md', url: '/docs/ai-workflow/', locale: 'en', key: '/docs/ai-workflow/', label: 'AI authoring workflow', group: 'Use', description: 'The steps an AI author follows to produce a DocForge document: write strict JSON, check it, preview the pages, then export the DOCX.' },
+  { source: 'docs/limitations.md', url: '/docs/limitations/', locale: 'en', key: '/docs/limitations/', label: 'Limitations', group: 'Reference' },
+  { source: 'docs/architecture.md', url: '/docs/architecture/', locale: 'en', key: '/docs/architecture/', label: 'Architecture', group: 'Reference' },
+  { source: 'docs/fidelity.md', url: '/docs/fidelity/', locale: 'en', key: '/docs/fidelity/', label: 'Fidelity study', group: 'Reference' },
+  { source: 'docs/deploy-site.md', url: '/docs/deploy-site/', locale: 'en', key: '/docs/deploy-site/', label: 'Deploying this site', group: 'Reference' },
+  { source: 'docs/plan.md', url: '/docs/plan/', locale: 'en', key: '/docs/plan/', label: 'Roadmap', group: 'Reference' },
+  { source: 'CHANGELOG.md', url: '/changelog/', locale: 'en', key: '/changelog/', label: 'Changelog', group: 'Reference' },
+  { source: 'README.zh-TW.md', url: '/zh-TW/', locale: 'zh-TW', key: 'home', label: '總覽', group: '開始' },
+  { source: 'docs/zh-TW/guide.md', url: '/zh-TW/guide/', locale: 'zh-TW', key: 'guide', label: '使用指南', group: '開始' },
+  { source: 'README.zh-CN.md', url: '/zh-CN/', locale: 'zh-CN', key: 'home', label: '总览', group: '开始' },
+  { source: 'docs/zh-CN/guide.md', url: '/zh-CN/guide/', locale: 'zh-CN', key: 'guide', label: '使用指南', group: '开始' },
+  { source: 'README.ja.md', url: '/ja/', locale: 'ja', key: 'home', label: '概要', group: 'はじめに' },
+  { source: 'docs/ja/guide.md', url: '/ja/guide/', locale: 'ja', key: 'guide', label: 'ガイド', group: 'はじめに' },
+];
+// Australian English: every English page again, from the same source, with Australian spelling in the
+// prose. Only a few words differ (colour, centre), so there is no second copy of the text to keep.
 const pages = [
-  { source: 'README.md', url: '/', locale: 'en', label: 'Overview', group: 'Start' },
-  { source: 'docs/cli.md', url: '/docs/cli/', locale: 'en', label: 'CLI', group: 'Use' },
-  { source: 'docs/schema.md', url: '/docs/schema/', locale: 'en', label: 'Document schema', group: 'Use' },
-  { source: 'docs/templates.md', url: '/docs/templates/', locale: 'en', label: 'Templates', group: 'Use' },
-  { source: 'docs/validation.md', url: '/docs/validation/', locale: 'en', label: 'Validation and lint', group: 'Use' },
-  { source: 'docs/ai-workflow.md', url: '/docs/ai-workflow/', locale: 'en', label: 'AI authoring workflow', group: 'Use', description: 'The steps an AI author follows to produce a DocForge document: write strict JSON, check it, preview the pages, then export the DOCX.' },
-  { source: 'docs/limitations.md', url: '/docs/limitations/', locale: 'en', label: 'Limitations', group: 'Reference' },
-  { source: 'docs/architecture.md', url: '/docs/architecture/', locale: 'en', label: 'Architecture', group: 'Reference' },
-  { source: 'docs/fidelity.md', url: '/docs/fidelity/', locale: 'en', label: 'Fidelity study', group: 'Reference' },
-  { source: 'docs/deploy-site.md', url: '/docs/deploy-site/', locale: 'en', label: 'Deploying this site', group: 'Reference' },
-  { source: 'docs/plan.md', url: '/docs/plan/', locale: 'en', label: 'Roadmap', group: 'Reference' },
-  { source: 'CHANGELOG.md', url: '/changelog/', locale: 'en', label: 'Changelog', group: 'Reference' },
-  { source: 'README.zh-TW.md', url: '/zh-TW/', locale: 'zh-TW', label: '總覽', group: '開始' },
-  { source: 'docs/zh-TW/guide.md', url: '/zh-TW/guide/', locale: 'zh-TW', label: '使用指南', group: '開始' },
+  ...sourcePages,
+  ...sourcePages
+    .filter((page) => page.locale === 'en')
+    .map((page) => ({ ...page, locale: 'en-AU', url: '/en-AU' + page.url, spelling: true })),
 ];
 // Last modification date (YYYY-MM-DD) of a source file: its last git commit, else the file's mtime.
 const lastModified = (source) => {
@@ -40,7 +52,38 @@ const lastModified = (source) => {
   } catch {}
   return statSync(join(root, source)).mtime.toISOString().slice(0, 10);
 };
-const byRepoPath = new Map(pages.map((page) => [page.source, page]));
+// A link resolves to the page for the same source in the same language, else to the English one (the
+// translated guides link to English pages that have no translation), else to any page for that source.
+const byRepoPath = new Map(pages.map((page) => [page.locale + ':' + page.source, page]));
+const findPage = (locale, source) =>
+  byRepoPath.get(locale + ':' + source) ?? byRepoPath.get('en:' + source) ?? pages.find((page) => page.source === source);
+
+/** Australian spelling for prose only: code spans, fenced code and link destinations are left alone. */
+const AU_SPELLING = [
+  [/\bcolors\b/g, 'colours'],
+  [/\bcolor\b/g, 'colour'],
+  [/\bColors\b/g, 'Colours'],
+  [/\bColor\b/g, 'Colour'],
+  [/\bcenter\b/g, 'centre'],
+  [/\bstabilize\b/g, 'stabilise'],
+];
+function australianSpelling(markdown) {
+  let fenced = false;
+  return markdown
+    .split('\n')
+    .map((line) => {
+      if (line.startsWith('```')) {
+        fenced = !fenced;
+        return line;
+      }
+      if (fenced) return line;
+      return line
+        .split(/(`[^`]*`|\]\([^)]*\))/)
+        .map((part) => (part.startsWith('`') || part.startsWith('](') ? part : AU_SPELLING.reduce((text, [pattern, word]) => text.replace(pattern, word), part)))
+        .join('');
+    })
+    .join('\n');
+}
 
 const escapeHtml = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const slug = (text) => text.toLowerCase().replace(/<[^>]+>/g, '').replace(/[^\p{L}\p{N}\s-]/gu, '').trim().replace(/\s+/g, '-');
@@ -48,11 +91,17 @@ const slug = (text) => text.toLowerCase().replace(/<[^>]+>/g, '').replace(/[^\p{
 const repoUrl = 'https://github.com/gordonkit/docforge';
 const locales = [
   { value: 'en', short: 'EN', label: 'English', home: '/' },
+  { value: 'en-AU', short: 'AU', label: 'English (Australia)', home: '/en-AU/' },
   { value: 'zh-TW', short: '繁中', label: '繁體中文', home: '/zh-TW/' },
+  { value: 'zh-CN', short: '简中', label: '简体中文', home: '/zh-CN/' },
+  { value: 'ja', short: '日本語', label: '日本語', home: '/ja/' },
 ];
 const labels = {
   en: { search: 'Search documentation', close: 'Close search', onPage: 'On this page', menu: 'Open navigation', copy: 'Copy code', copied: 'Copied', previous: 'Previous', next: 'Next', results: 'Search results', noResults: 'No matching documentation', license: 'Apache License 2.0', notices: 'Third-party notices', language: 'Change language', theme: 'Toggle theme', parent: 'A GordonKit project:' },
   'zh-TW': { search: '搜尋文件', close: '關閉搜尋', onPage: '本頁內容', menu: '開啟導覽', copy: '複製程式碼', copied: '已複製', previous: '上一頁', next: '下一頁', results: '搜尋結果', noResults: '找不到符合的文件', license: 'Apache 2.0 授權', notices: '第三方授權聲明', language: '切換語言', theme: '切換主題', parent: 'GordonKit 旗下網站：' },
+  'zh-CN': { search: '搜索文档', close: '关闭搜索', onPage: '本页内容', menu: '打开导航', copy: '复制代码', copied: '已复制', previous: '上一页', next: '下一页', results: '搜索结果', noResults: '找不到匹配的文档', license: 'Apache 2.0 许可证', notices: '第三方许可声明', language: '切换语言', theme: '切换主题', parent: 'GordonKit 旗下网站：' },
+  ja: { search: 'ドキュメントを検索', close: '検索を閉じる', onPage: 'このページの内容', menu: 'ナビゲーションを開く', copy: 'コードをコピー', copied: 'コピーしました', previous: '前へ', next: '次へ', results: '検索結果', noResults: '一致するドキュメントはありません', license: 'Apache License 2.0', notices: 'サードパーティの著作権表示', language: '言語を切り替え', theme: 'テーマを切り替え', parent: 'GordonKit のプロジェクト：' },
+  'en-AU': { search: 'Search documentation', close: 'Close search', onPage: 'On this page', menu: 'Open navigation', copy: 'Copy code', copied: 'Copied', previous: 'Previous', next: 'Next', results: 'Search results', noResults: 'No matching documentation', license: 'Apache Licence 2.0', notices: 'Third-party notices', language: 'Change language', theme: 'Toggle theme', parent: 'A GordonKit project:' },
 };
 
 // Heroicons 24 outline paths (MIT), the icon set the SlideForge documentation site uses.
@@ -84,7 +133,7 @@ const marked = new Marked({
     if (token.type !== 'link' || /^(https?:|mailto:|#)/.test(token.href)) return;
     const [path, hash] = token.href.split('#');
     const target = posix.normalize(posix.join(posix.dirname(currentSource), path));
-    const page = byRepoPath.get(target);
+    const page = findPage(currentLocale, target);
     token.href = page ? page.url + (hash ? `#${hash}` : '') : repoBlob + target + (hash ? `#${hash}` : '');
   },
   renderer: {
@@ -118,7 +167,7 @@ function descriptionOf(markdown) {
     } else if (paragraph.length > 0) {
       if (line.trim() === '') break;
       paragraph.push(line.trim());
-    } else if (!fenced && /^[A-Za-z一-鿿]/.test(line)) {
+    } else if (!fenced && /^[A-Za-z぀-ヿ一-鿿]/.test(line)) {
       paragraph.push(line.trim());
     }
   }
@@ -137,6 +186,14 @@ function shorten(text, limit) {
 }
 
 const logo = 'DocForge <span>Docs</span>';
+
+const homeTitles = {
+  en: 'DocForge: editable Word documents from strict JSON',
+  'en-AU': 'DocForge: editable Word documents from strict JSON',
+  'zh-TW': 'DocForge：用嚴格 JSON 產生可編輯的 Word 文件',
+  'zh-CN': 'DocForge：用严格 JSON 生成可编辑的 Word 文档',
+  ja: 'DocForge：厳密な JSON から編集可能な Word 文書を作成',
+};
 
 // The same @id values gordonkit.com uses for its Organization and for this site, so the two
 // entity graphs join.
@@ -230,11 +287,14 @@ function pageHtml(page, markdown) {
     .replace(/<\/table>/g, '</table></div>')
     .replace(/^(<h1[^>]*>[\s\S]*?<\/h1>\n(?:<p>[\s\S]*?<\/p>\n)?)/, (head) => `<div class="page-head">${eyebrow}${head}</div>\n`);
   const toc = currentToc.map((item) => `<a href="#${item.id}">${item.text}</a>`).join('');
-  const title = page.url === '/' ? 'DocForge: editable Word documents from strict JSON' : page.url === '/zh-TW/' ? 'DocForge：用嚴格 JSON 產生可編輯的 Word 文件' : `${titleOf(markdown)} | DocForge`;
+  const title = page.key === 'home' ? homeTitles[page.locale] : `${titleOf(markdown)} | DocForge`;
   const description = page.description ?? descriptionOf(markdown);
+  const siblings = pages.filter((item) => item.key === page.key);
+  const english = siblings.find((item) => item.locale === 'en');
   const alternates =
-    page.url === '/' || page.url === '/zh-TW/'
-      ? `<link rel="alternate" hreflang="en" href="${siteUrl}/"><link rel="alternate" hreflang="zh-TW" href="${siteUrl}/zh-TW/"><link rel="alternate" hreflang="x-default" href="${siteUrl}/">`
+    siblings.length > 1
+      ? siblings.map((item) => `<link rel="alternate" hreflang="${item.locale}" href="${siteUrl}${item.url}">`).join('') +
+        (english ? `<link rel="alternate" hreflang="x-default" href="${siteUrl}${english.url}">` : '')
       : '';
   return `<!doctype html>
 <html lang="${page.locale}">
@@ -283,23 +343,20 @@ const notFound = `<!doctype html>
 <body><main class="plain"><h1>Page not found</h1><p><a href="/">Back to the DocForge documentation</a></p></main></body></html>
 `;
 
+const llmsHeadings = { en: 'Documentation', 'en-AU': 'English (Australia)', 'zh-TW': '繁體中文', 'zh-CN': '简体中文', ja: '日本語' };
+
 function llmsText() {
   const list = (locale) =>
     pages
       .filter((page) => page.locale === locale)
       .map((page) => `- [${page.label}](${siteUrl}${page.url})`)
       .join('\n');
+  const sections = locales.map((item) => `## ${llmsHeadings[item.value]}\n\n${list(item.value)}`).join('\n\n');
   return `# DocForge
 
 > DocForge turns strict JSON into editable Word (DOCX) documents, with lint, previews and export verification. It is built for AI authors and published by GordonKit.
 
-## Documentation
-
-${list('en')}
-
-## 繁體中文
-
-${list('zh-TW')}
+${sections}
 
 ## Source
 
@@ -314,7 +371,8 @@ await cp(join(here, 'public'), dist, { recursive: true });
 const unescapeHtml = (text) => text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
 const searchIndex = [];
 for (const page of pages) {
-  const markdown = (await readFile(join(root, page.source), 'utf8')).replace(/\r\n/g, '\n');
+  const source = (await readFile(join(root, page.source), 'utf8')).replace(/\r\n/g, '\n');
+  const markdown = page.spelling ? australianSpelling(source) : source;
   const target = join(dist, page.url, 'index.html');
   await mkdir(dirname(target), { recursive: true });
   const html = pageHtml(page, markdown);

@@ -61,4 +61,5 @@ docforge preview <document.json> [--output-dir <目錄>] [--engine word-com|libr
 - 註腳是純文字；不支援註解、追蹤修訂與交互參照。
 - 目錄由 Word 開啟或匯出時才會填入；LibreOffice 預覽只顯示佔位文字。
 - 字型不內嵌，開啟 DOCX 的電腦需安裝範本所用字型（中文預設 Microsoft JhengHei）。
+- 範本的東亞字型目前固定為繁體中文字型；簡體中文與日文的文件也會使用它，字形可能與預期不同。
 - 輸出以結構驗證，不保證像素級一致。

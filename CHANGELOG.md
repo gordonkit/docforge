@@ -6,6 +6,14 @@ All notable changes are listed here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- The documentation site is also available in Simplified Chinese (`/zh-CN/`), Japanese (`/ja/`) and
+  Australian English (`/en-AU/`), matching gordonkit.com. The Simplified Chinese and Japanese pages
+  are the overview and a condensed guide, like the Traditional Chinese ones; the Australian English
+  pages are the English pages with Australian spelling. `README.zh-CN.md` and `README.ja.md` are the
+  matching overviews on GitHub.
+
 ### Changed
 
 - Every page of the documentation site carries JSON-LD that names GordonKit as its publisher,
